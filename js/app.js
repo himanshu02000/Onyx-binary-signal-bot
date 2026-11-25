@@ -67,6 +67,10 @@ var TV_SYMBOLS = {
   'USD/CAD': 'FX:USDCAD'
 };
 
+/* Display names for server strategy / broker values. */
+var STRATEGY_DISPLAY = { elite: 'Elite', turbo: 'Turbo', prime: 'Prime', ha_fade: 'HA-fade', momentum: 'Momentum' };
+var BROKER_DISPLAY = { finnhub: 'Finnhub', quotex: 'Quotex', olymp_trade: 'Olymp Trade', pocket_option: 'Pocket Option' };
+
 /* ---------- State ---------- */
 var state = {
   plan: 'free',          // 'free' | 'premium' (preview toggle)
@@ -76,7 +80,8 @@ var state = {
   network: 'BSC',        // 'BSC' | 'Tron'
   signals: [],
   results: [],
-  live: false            // true only when the API answered
+  live: false,           // true only when the API answered
+  generatedSignal: null  // last on-demand generated signal (shown above the feed)
 };
 
 try {
@@ -226,7 +231,11 @@ function renderSignals() {
   var empty = $('emptyState');
   var note = $('freeLimitNote');
   if (!feed) { return; }
-  var list = filteredSignals();
+  // The just-generated signal is shown in #generatedNow above the feed,
+  // so it is left out of the feed list itself (no duplicate card).
+  var list = filteredSignals().filter(function (s) {
+    return !(state.generatedSignal && s.id === state.generatedSignal.id);
+  });
   var visibleLimit = state.plan === 'premium' ? list.length : ONYX_CONFIG.FREE_DAILY_SIGNALS;
 
   if (state.plan === 'free') {
@@ -258,6 +267,113 @@ function renderSignals() {
 $('signalFeed').addEventListener('click', function (e) {
   var btn = e.target.closest('[data-chart-pair]');
   if (btn) { loadChart(btn.getAttribute('data-chart-pair')); }
+});
+$('generatedNow').addEventListener('click', function (e) {
+  var btn = e.target.closest('[data-chart-pair]');
+  if (btn) { loadChart(btn.getAttribute('data-chart-pair')); }
+});
+
+/* ---------- Generate new signal (on-demand, 1-minute) ---------- */
+function fmtTime(iso) {
+  if (!iso) { return ''; }
+  var d = new Date(iso);
+  if (isNaN(d.getTime())) { return String(iso); }
+  return d.toISOString().slice(11, 16); // UTC HH:MM
+}
+/* Map a server signal row (API shape) to the card shape. Sample rows
+   pass through unchanged — they already use the card fields. */
+function normalizeApiSignal(s) {
+  return {
+    id: s.id,
+    pair: s.pair,
+    direction: s.direction,
+    entry_time: s.entry_time || fmtTime(s.entry),
+    time: s.time || fmtTime(s.sent_at),
+    expiry: s.expiry || '1 min',
+    strategy: STRATEGY_DISPLAY[String(s.strategy || '').toLowerCase()] || s.strategy,
+    strategyKey: String(s.strategy || '').toLowerCase(),
+    broker: BROKER_DISPLAY[String(s.broker || '').toLowerCase()] || s.broker,
+    market: 'Real',
+    is_beta: true,
+    source: s.source || null
+  };
+}
+
+function generatedCardHtml(s) {
+  var dirClass = s.direction === 'CALL' ? 'call' : 'put';
+  var marketBadge = s.strategy === 'Prime'
+    ? '<span class="badge real">REAL MARKET ONLY</span>'
+    : '<span class="badge otc">Real Market</span>';
+  var quickNote = s.source === 'quick_read'
+    ? '<p class="small">Momentum — a quick read of the last candle, not a strategy setup.</p>'
+    : '';
+  return '<article class="card signal-card" data-pair="' + esc(s.pair) + '">' +
+    '<div class="signal-top"><div><span class="badge beta">BETA</span> ' +
+    '<span class="badge">Generated now — ' + esc(s.strategy.toUpperCase()) + '</span></div>' +
+    '<span class="direction ' + dirClass + '">' + esc(s.direction) + '</span></div>' +
+    '<div class="signal-top" style="margin-top:6px;"><span class="pair">' + esc(s.pair) + '</span>' + marketBadge + '</div>' +
+    '<div class="signal-rows">' +
+    '<div><span>Direction</span><strong>' + esc(s.direction) + '</strong></div>' +
+    '<div><span>Entry Time</span><strong>' + esc(s.entry_time) + '</strong></div>' +
+    '<div><span>Expiry</span><strong>' + esc(s.expiry) + '</strong></div>' +
+    '<div><span>Broker</span><strong>' + esc(s.broker) + '</strong></div>' +
+    '<div><span>Strategy</span><strong>' + esc(s.strategy) + '</strong></div>' +
+    '<div><span>Time</span><strong>' + esc(s.time) + '</strong></div>' +
+    '</div>' + quickNote +
+    '<p class="risk-note">Risk note: Use fixed, small risk. No signal is 100%. Skip if the entry time has passed.</p>' +
+    '<button class="btn small secondary" type="button" data-chart-pair="' + esc(s.pair) + '">View chart</button>' +
+    '</article>';
+}
+
+function renderGeneratedNow() {
+  var box = $('generatedNow');
+  if (!box) { return; }
+  box.innerHTML = state.generatedSignal ? generatedCardHtml(state.generatedSignal) : '';
+}
+
+function setGenerateButtons(disabled, busyPair) {
+  var btns = document.querySelectorAll('#generatePairs .filter-btn');
+  btns.forEach(function (b) {
+    b.disabled = disabled;
+    b.textContent = (disabled && b.getAttribute('data-generate-pair') === busyPair)
+      ? 'Generating…'
+      : b.getAttribute('data-generate-pair');
+  });
+}
+
+$('generatePairs').addEventListener('click', function (e) {
+  var btn = e.target.closest('[data-generate-pair]');
+  if (!btn || btn.disabled) { return; }
+  var pair = btn.getAttribute('data-generate-pair');
+  var status = $('generateStatus');
+  status.textContent = '';
+  status.className = 'status';
+  setGenerateButtons(true, pair);
+  fetch(ONYX_CONFIG.API_BASE + '/signals/generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pair: pair, plan: state.plan })
+  })
+    .then(function (res) {
+      return res.json().then(function (body) {
+        if (!res.ok) { throw new Error((body && body.detail) || ('HTTP ' + res.status)); }
+        return body;
+      });
+    })
+    .then(function (body) {
+      state.generatedSignal = normalizeApiSignal(body.signal || {});
+      renderGeneratedNow();
+      status.textContent = body.free_limit_remaining == null
+        ? 'Signal generated for ' + pair + '.'
+        : 'Signal generated for ' + pair + '. ' + body.free_limit_remaining + ' free signals left today.';
+      status.className = 'status ok';
+      loadFromApi(); // refresh the feed so the count stays true
+    })
+    .catch(function (err) {
+      status.textContent = (err && err.message) || 'Could not generate a signal right now. Please try again.';
+      status.className = 'status error';
+    })
+    .finally(function () { setGenerateButtons(false); });
 });
 
 /* ---------- OTC "Coming soon" section ---------- */
@@ -414,7 +530,9 @@ function loadFromApi() {
       var signals = Array.isArray(parts[0]) ? parts[0] : (parts[0].signals || []);
       var results = Array.isArray(parts[1]) ? parts[1] : (parts[1].results || []);
       // Real pairs only: drop any OTC entry the server may still send.
-      state.signals = signals.filter(isRealMarket);
+      // Normalize API rows to the card shape (entry/time/strategy/broker
+      // display names) so live signals render like the samples do.
+      state.signals = signals.filter(isRealMarket).map(normalizeApiSignal);
       state.results = results.filter(isRealMarket);
       state.live = true;
       setStatus($('signalsStatus'), 'Live signals loaded from the server.', 'ok');

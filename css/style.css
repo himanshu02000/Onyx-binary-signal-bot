@@ -1,50 +1,59 @@
-/* Onyx Binary Signal Bot — free static frontend.
-   Night mode: obsidian + champagne gold. Day mode: porcelain + gold.
-   No paid fonts, no paid libraries. System fonts only. */
+/* Onyx Binary Signal Bot — simple premium redesign.
+   Reference language: simple premium landing — light, clean, lots of
+   whitespace, one idea per section, short plain sentences, minimal
+   decoration. No decoration, no dark tiles, no oversized footer type. Gold accent used sparingly
+   (eyebrow, one button, small highlights). System fonts only, no
+   external images, no new dependencies.
+   Day (porcelain) is the showcase; Night keeps the same clean layout. */
 
 :root {
   --gold: #c9a227;
-  --gold-soft: #d4af37;
+  --gold-soft: #a8851a;
   --gold-dim: #8a6d1b;
-  --green: #1e9e62;
-  --red: #d33a2c;
-  --radius: 14px;
-}
-
-html[data-theme="night"] {
-  --bg: #0b0b0e;
-  --bg-soft: #141419;
-  --card: #17171d;
-  --card-border: #2a2a33;
-  --text: #f2ede3;
-  --muted: #a8a29a;
-  --bar: #101014;
-  --chip: #22222b;
-  --input-bg: #101014;
-  --shadow: 0 4px 18px rgba(0, 0, 0, .45);
+  --green: #1e7d4f;
+  --red: #c23b2e;
+  --radius: 12px;
+  --body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 html[data-theme="day"] {
-  --bg: #faf6ee;
-  --bg-soft: #f3ecdd;
-  --card: #fffdf7;
-  --card-border: #e4dcc8;
-  --text: #221d12;
-  --muted: #6f675a;
-  --bar: #fffdf7;
-  --chip: #f0e8d6;
-  --input-bg: #fffdf7;
-  --shadow: 0 4px 18px rgba(120, 100, 40, .12);
+  --bg: #fbfaf7;
+  --bg-soft: #f3f0e9;
+  --card: #ffffff;
+  --card-border: #e8e3d8;
+  --text: #1a1712;
+  --muted: #6f6a5e;
+  --bar: #fbfaf7;
+  --chip: #f0ede4;
+  --input-bg: #ffffff;
+  --shadow: 0 1px 3px rgba(20, 16, 5, .06);
+  --gold-btn-bg: #c9a227;
+  --gold-btn-text: #171205;
+}
+
+html[data-theme="night"] {
+  --bg: #0f1214;
+  --bg-soft: #181c1f;
+  --card: #181c1f;
+  --card-border: #2b3136;
+  --text: #f2f0ea;
+  --muted: #a6a49b;
+  --bar: #0f1214;
+  --chip: #1e2327;
+  --input-bg: #181c1f;
+  --shadow: 0 1px 3px rgba(0, 0, 0, .4);
+  --gold-btn-bg: #c9a227;
+  --gold-btn-text: #171205;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: var(--body);
   background: var(--bg);
   color: var(--text);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.55;
   padding-bottom: 84px; /* room for bottom nav */
 }
 
@@ -56,12 +65,12 @@ button { font-family: inherit; cursor: pointer; }
   position: sticky; top: 0; z-index: 20;
   background: var(--bar);
   border-bottom: 1px solid var(--card-border);
-  padding: 10px 16px;
+  padding: 14px 16px;
 }
-.header-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.brand h1 { font-size: 19px; letter-spacing: .4px; }
+.header-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; max-width: 640px; margin: 0 auto; }
+.brand h1 { font-size: 18px; font-weight: 800; letter-spacing: -.01em; }
 .brand h1 .onyx-dot { color: var(--gold-soft); }
-.brand p { font-size: 12px; color: var(--muted); }
+.brand p { font-size: 12px; color: var(--muted); margin-top: 1px; }
 .header-toggles { display: flex; gap: 6px; }
 .toggle-btn {
   background: var(--chip); color: var(--text);
@@ -70,7 +79,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .toggle-btn.active { background: var(--gold); border-color: var(--gold); color: #141005; }
 
-/* ---------- BETA banner ---------- */
+/* ---------- BETA banner (kept exactly as visible) ---------- */
 .beta-banner {
   background: var(--gold); color: #141005;
   text-align: center; font-size: 13px; font-weight: 700;
@@ -80,31 +89,79 @@ button { font-family: inherit; cursor: pointer; }
 /* ---------- Layout ---------- */
 .screen { display: none; max-width: 640px; margin: 0 auto; padding: 16px 16px 24px; }
 .screen.active { display: block; }
-h2 { font-size: 22px; line-height: 1.25; margin: 6px 0 8px; }
-h3 { font-size: 17px; margin: 18px 0 8px; }
+h2 { font-size: 32px; font-weight: 800; line-height: 1.15; letter-spacing: -.02em; margin: 6px 0 10px; }
+h3 { font-size: 24px; font-weight: 800; line-height: 1.2; letter-spacing: -.015em; margin: 48px 0 10px; }
+h4 { font-size: 17px; font-weight: 800; letter-spacing: -.01em; margin: 0 0 4px; }
 p { margin-bottom: 10px; }
-.lead { color: var(--muted); }
+.lead { color: var(--muted); font-size: 16px; }
 .small { font-size: 13px; color: var(--muted); }
-.gold { color: var(--gold-soft); }
 .center { text-align: center; }
+
+/* ---------- Hero: plain, centred, one idea ---------- */
+.hero { text-align: center; padding: 56px 8px 40px; }
+.hero-proof {
+  font-size: 12px; font-weight: 800; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--gold-soft);
+  margin-bottom: 18px;
+}
+.hero h2 { font-size: clamp(36px, 9vw, 46px); line-height: 1.1; margin: 0 0 16px; }
+.hero h2 .accent { color: var(--gold-soft); }
+.hero .lead { max-width: 440px; margin: 0 auto 10px; }
+.hero-cta { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 26px 0 18px; }
+.hero .status { margin-top: 4px; }
+.hero .chips { justify-content: center; }
+
+/* Gold primary button (the one gold button) + plain secondary */
+.btn-gold {
+  display: inline-block; width: auto;
+  background: var(--gold-btn-bg); color: var(--gold-btn-text);
+  border: none; border-radius: 999px;
+  padding: 14px 26px; font-size: 15px; font-weight: 800;
+}
+.btn-plain {
+  display: inline-block; width: auto;
+  background: transparent; color: var(--text);
+  border: 1px solid var(--card-border); border-radius: 999px;
+  padding: 14px 22px; font-size: 15px; font-weight: 700;
+}
+
+/* ---------- Stats: plain numbers, no decoration ---------- */
+.stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  padding: 28px 0; margin: 8px 0;
+  border-top: 1px solid var(--card-border);
+  border-bottom: 1px solid var(--card-border);
+  text-align: center;
+}
+.stat-num { display: block; font-size: 30px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+.stat-label { display: block; font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.35; }
+
+/* ---------- Features: simple rows with hairline dividers ---------- */
+.features { margin: 6px 0; }
+.feature { padding: 18px 0; border-bottom: 1px solid var(--card-border); }
+.feature:first-child { border-top: 1px solid var(--card-border); }
+.feature p { color: var(--muted); margin-bottom: 0; }
 
 /* ---------- Cards ---------- */
 .card {
   background: var(--card); border: 1px solid var(--card-border);
-  border-radius: var(--radius); padding: 16px; margin: 12px 0;
+  border-radius: var(--radius); padding: 18px; margin: 12px 0;
   box-shadow: var(--shadow);
 }
 .card h3 { margin-top: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
 .chip {
   background: var(--chip); border: 1px solid var(--card-border);
-  border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600;
+  border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
 }
 .chip.gold-chip { border-color: var(--gold); color: var(--gold-soft); }
 
 .badge {
-  display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .5px;
+  display: inline-block;
+  font-size: 11px; font-weight: 800; letter-spacing: .5px;
   border-radius: 6px; padding: 3px 8px; text-transform: uppercase;
+  vertical-align: middle;
 }
 .badge.sample { background: var(--gold); color: #141005; }
 .badge.beta { background: transparent; border: 1px solid var(--gold); color: var(--gold-soft); }
@@ -118,30 +175,75 @@ p { margin-bottom: 10px; }
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-block; width: 100%; text-align: center;
-  background: var(--gold); color: #141005; border: none;
-  border-radius: 10px; padding: 13px 16px;
-  font-size: 16px; font-weight: 700; margin: 8px 0; text-decoration: none;
+  background: var(--text); color: var(--bg);
+  border: 1px solid var(--text);
+  border-radius: var(--radius); padding: 14px 18px;
+  font-size: 15px; font-weight: 700; margin: 8px 0; text-decoration: none;
 }
 .btn.secondary {
-  background: transparent; color: var(--gold-soft);
-  border: 1px solid var(--gold);
+  background: transparent; color: var(--text);
+  border: 1px solid var(--card-border);
 }
-.btn.small { width: auto; padding: 8px 14px; font-size: 14px; }
+.btn.small { width: auto; padding: 9px 16px; font-size: 13px; }
 
-/* ---------- Broker sections ---------- */
-.broker-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+/* ---------- Broker cards: simple light cards ---------- */
+.broker-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 12px 0; }
 .broker-card {
   background: var(--card); border: 1px solid var(--card-border);
-  border-radius: var(--radius); padding: 14px 16px;
-  display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  border-radius: var(--radius); padding: 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  box-shadow: var(--shadow);
 }
-.broker-card strong { font-size: 16px; display: block; }
-.broker-card span { font-size: 13px; color: var(--muted); }
+.broker-card strong { font-size: 19px; font-weight: 800; letter-spacing: -.01em; display: block; }
+.broker-card span { font-size: 13px; color: var(--muted); display: block; margin-top: 2px; }
+.broker-card .btn { margin: 0; flex-shrink: 0; }
+
+/* ---------- Comparison: two plain columns ---------- */
+.compare-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+.compare-col {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 20px;
+}
+.compare-col h4 { margin-bottom: 12px; }
+.compare-col ul { list-style: none; }
+.compare-col li { font-size: 15px; color: var(--muted); padding: 6px 0 6px 22px; position: relative; }
+.compare-col li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
+.compare-col.onyx-col li { color: var(--text); }
+.compare-col.onyx-col li::before { content: "✓"; color: var(--gold-soft); font-weight: 800; }
+
+/* ---------- Strategy cards ---------- */
+.strategy-tile { padding: 20px; }
+.strategy-tile h3 { font-size: 21px; margin-bottom: 8px; }
+
+/* ---------- FAQ ---------- */
+.faq-list { padding: 6px 18px; }
+.faq-item { padding: 14px 0; border-bottom: 1px solid var(--card-border); }
+.faq-item:last-child { border-bottom: none; }
+.faq-item strong { display: block; margin-bottom: 4px; font-size: 16px; }
+.faq-item { font-size: 15px; color: var(--muted); }
+.faq-item strong { color: var(--text); }
+
+/* ---------- Final CTA ---------- */
+.final-cta { text-align: center; padding: 52px 8px 44px; }
+.final-cta h3 { margin-top: 0; font-size: 28px; }
+.final-cta p { color: var(--muted); margin-bottom: 22px; }
+
+/* ---------- Footer: minimal ---------- */
+.site-footer {
+  border-top: 1px solid var(--card-border);
+  padding: 28px 8px 8px; margin-top: 16px; text-align: center;
+}
+.footer-nav { display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; }
+.footer-nav button {
+  background: none; border: none; color: var(--muted);
+  font-size: 13px; font-weight: 700; padding: 4px 0;
+}
+.footer-note { color: var(--muted); font-size: 12px; max-width: 440px; margin: 16px auto 0; }
 
 /* ---------- Signal cards ---------- */
-.signal-card { border-left: 4px solid var(--gold); }
+.signal-card { border-left: 3px solid var(--gold); }
 .signal-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-.signal-top .pair { font-size: 19px; font-weight: 800; }
+.signal-top .pair { font-size: 22px; font-weight: 800; letter-spacing: -.01em; }
 .direction { font-size: 18px; font-weight: 800; }
 .direction.call { color: var(--green); }
 .direction.put { color: var(--red); }
@@ -192,7 +294,7 @@ label { font-size: 14px; font-weight: 600; display: block; margin-top: 10px; }
 }
 .value-row:last-child { border-bottom: none; }
 .value-row .worth { color: var(--gold-soft); font-weight: 700; white-space: nowrap; }
-.price-big { font-size: 34px; font-weight: 800; color: var(--gold-soft); }
+.price-big { font-size: 52px; font-weight: 800; letter-spacing: -.02em; color: var(--gold-soft); }
 .price-big small { font-size: 15px; color: var(--muted); font-weight: 600; }
 table.compare { width: 100%; border-collapse: collapse; font-size: 14px; margin: 8px 0; }
 table.compare th, table.compare td {
@@ -209,8 +311,7 @@ ol.steps li, ol.rules li { margin-bottom: 8px; }
 .wallet-box .not-set { color: var(--gold-soft); font-weight: 700; }
 .network-row { display: flex; gap: 8px; }
 .network-row .filter-btn { flex: 1; padding: 12px; font-size: 15px; }
-.faq-item { margin-bottom: 12px; }
-.faq-item strong { display: block; margin-bottom: 2px; }
+.faq-item { margin-bottom: 0; }
 .risk-box {
   border: 1px solid var(--red); border-radius: var(--radius);
   padding: 14px; font-size: 14px; margin: 16px 0;
@@ -218,8 +319,12 @@ ol.steps li, ol.rules li { margin-bottom: 8px; }
 .risk-box strong { color: var(--red); }
 
 /* ---------- Chart ---------- */
-.chart-wrap { border: 1px solid var(--card-border); border-radius: var(--radius); overflow: hidden; margin: 10px 0; }
-.chart-wrap .tradingview-widget-container { min-height: 320px; }
+.chart-wrap { border: 1px solid var(--card-border); border-radius: var(--radius); overflow: hidden; margin: 10px 0; height: 440px; }
+.chart-wrap .tradingview-widget-container { height: 440px; }
+.generate-box { margin: 12px 0; }
+.generate-box .filter-btn:disabled { opacity: 0.5; }
+#generatedNow .signal-card { border-color: var(--gold); }
+.chart-wrap .tradingview-widget-container__widget { height: 100%; }
 .chart-note { font-size: 13px; color: var(--muted); }
 
 /* ---------- Empty state ---------- */
@@ -240,8 +345,13 @@ ol.steps li, ol.rules li { margin-bottom: 8px; }
 .nav-btn .nav-icon { display: block; font-size: 20px; line-height: 1.1; }
 .nav-btn.active { color: var(--gold-soft); }
 
-/* ---------- Status / toast ---------- */
+/* ---------- Status ---------- */
 .status { font-size: 13px; color: var(--muted); margin: 6px 0; }
 .status.error { color: var(--red); }
 .status.ok { color: var(--green); }
 .hidden { display: none !important; }
+
+@media (max-width: 480px) {
+  .compare-cols { grid-template-columns: 1fr; }
+  .stat-num { font-size: 25px; }
+}

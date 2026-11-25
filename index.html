@@ -28,18 +28,39 @@
 
   <!-- ============ HOME ============ -->
   <section class="screen active" id="screen-home">
-    <h2>The first bot with 98.76% accuracy</h2>
-    <p class="lead">Welcome back. Today's best setups are being watched live.</p>
-    <div class="chips">
-      <span class="chip gold-chip">Verified</span>
-      <span class="chip gold-chip">Engine Live</span>
-      <span class="chip gold-chip">USDT payments only</span>
-      <span class="chip">BETA — SAMPLE DATA</span>
+    <div class="hero">
+      <p class="hero-proof">3 private strategies · 3 brokers · 10 free signals a day</p>
+      <h2>The first bot with <span class="accent">98.76%</span> accuracy</h2>
+      <p class="lead">Welcome back. Today's best setups are being watched live.</p>
+      <div class="hero-cta">
+        <button class="btn-gold" type="button" data-goto="signals">See live signals</button>
+        <button class="btn-plain" type="button" data-goto="premium">Go Premium — 1.97 USDT/mo</button>
+      </div>
+      <p id="todayCount" class="status">Today's signals: —</p>
+      <div class="chips">
+        <span class="chip gold-chip">Verified</span>
+        <span class="chip gold-chip">Engine Live</span>
+        <span class="chip gold-chip">USDT payments only</span>
+        <span class="chip">BETA — SAMPLE DATA</span>
+      </div>
     </div>
 
-    <p id="todayCount" class="status">Today's signals: —</p>
-
     <div class="ad-slot" data-ad-slot>Ad space</div>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Private strategies</span></div>
+      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Brokers supported</span></div>
+      <div class="stat"><span class="stat-num">10</span><span class="stat-label">Free signals a day</span></div>
+      <div class="stat"><span class="stat-num">1.97</span><span class="stat-label">USDT / month Premium</span></div>
+    </div>
+
+    <h3>What do you get?</h3>
+    <div class="features">
+      <div class="feature"><h4>A clear signal</h4><p>Pair, direction, entry time and expiry — one clean instruction.</p></div>
+      <div class="feature"><h4>Three brokers</h4><p>Olymp Trade, Quotex and Pocket Option. You place the trade on your own broker.</p></div>
+      <div class="feature"><h4>Free to start</h4><p>10 signals a day with ads. Premium removes the ads and unlocks everything.</p></div>
+      <div class="feature"><h4>Private methods</h4><p>Elite, Turbo and Prime stay private. You receive only the signal.</p></div>
+    </div>
 
     <h3>Pick your broker</h3>
     <div class="broker-grid">
@@ -48,10 +69,32 @@
       <div class="broker-card"><div><strong>Pocket Option</strong><span>Real market signals · OTC coming soon</span></div><button class="btn small secondary" type="button" data-broker-link="Pocket Option">View signals</button></div>
     </div>
 
+    <h3>Trading on your own, or with Onyx?</h3>
+    <div class="compare-cols">
+      <div class="compare-col">
+        <h4>Trading on your own</h4>
+        <ul>
+          <li>You watch the charts all day.</li>
+          <li>You guess CALL or PUT.</li>
+          <li>You enter late, with no expiry plan.</li>
+          <li>You repeat the same mistakes.</li>
+        </ul>
+      </div>
+      <div class="compare-col onyx-col">
+        <h4>With Onyx</h4>
+        <ul>
+          <li>Signals come to you, only when a setup is clean.</li>
+          <li>Each signal says CALL or PUT, entry time and expiry.</li>
+          <li>You take only the best setups — or none at all.</li>
+          <li>Every result is shown, win or loss.</li>
+        </ul>
+      </div>
+    </div>
+
     <h3>Pick Your Style</h3>
     <p class="lead">Elite = patient and selective. Turbo = fast and active. Prime = real market only, planned and calm. Change your pick any time. Premium unlocks all 3. The methods behind all 3 stay private — you receive only the signals.</p>
 
-    <div class="card">
+    <div class="card strategy-tile">
       <h3>ELITE — Few Signals. Best Quality.</h3>
       <p>Quality over quantity. 5-10 minutes of analysis for carefully filtered signals.</p>
       <p class="small">Our most selective strategy. Elite waits, and waits, and only releases a signal when everything is right. If nothing is right, Elite gives nothing that day. That patience is the value.</p>
@@ -59,7 +102,7 @@
       <button class="btn small secondary" type="button" data-strategy-link="Elite">See Elite signals</button>
     </div>
 
-    <div class="card">
+    <div class="card strategy-tile">
       <h3>TURBO — Fast Signals For Fast Traders.</h3>
       <p>Instant signals with more frequent trading opportunities.</p>
       <p class="small">Our fastest strategy. Turbo signals come with a short window to act, so they suit traders who are online, alert and ready. When there is no clear opportunity, Turbo stays silent — no forced trades.</p>
@@ -67,7 +110,7 @@
       <button class="btn small secondary" type="button" data-strategy-link="Turbo">See Turbo signals</button>
     </div>
 
-    <div class="card">
+    <div class="card strategy-tile">
       <h3>PRIME — Real Market. Planned Trades. <span class="badge real">REAL MARKET ONLY</span></h3>
       <p>5-10 minutes of in-depth analysis for best accuracy signal.</p>
       <p class="small">Our real-market strategy. Prime gives planned, calm signals for real-market pairs only. No OTC. No random trades in the middle of nowhere — only signals released when our private method says the time is right.</p>
@@ -82,6 +125,34 @@
     <button class="btn secondary" type="button" data-goto="premium">Go Premium</button>
 
     <div class="ad-slot" data-ad-slot>Ad space</div>
+
+    <h3>Questions, answered</h3>
+    <p class="lead">Before you start. The honest answers to what people ask first.</p>
+    <div class="card faq-list">
+      <div class="faq-item"><strong>Q: Are the signals live yet?</strong>Onyx is in beta. Signals are being tested right now, and sample signals are clearly marked SAMPLE. Past results do not guarantee future results.</div>
+      <div class="faq-item"><strong>Q: What do I get in Premium?</strong>All 3 strategies (Elite, Turbo, Prime), up to 5 signals a day, full pair, direction, entry time and expiry, full results history, no ads, priority support.</div>
+      <div class="faq-item"><strong>Q: How do I pay?</strong>USDT only. Two networks: BSC (BEP20) or Tron (TRC20). Steps are on the Premium screen. No UPI, no card.</div>
+      <div class="faq-item"><strong>Q: Which brokers can I use?</strong>Place trades on your own broker — for example Olymp Trade, Quotex or Pocket Option — as shown for each signal.</div>
+      <div class="faq-item"><strong>Q: Is Prime for OTC?</strong>No. Prime is REAL MARKET ONLY. Never use it on OTC pairs.</div>
+      <div class="faq-item"><strong>Q: How many signals a day?</strong>Up to 5. Some days fewer, if no clean setup comes. We never force a signal.</div>
+      <div class="faq-item"><strong>Q: Can I lose money?</strong>Yes. Trading is risky and no signal wins always. Use small, fixed risk and read the Risk page.</div>
+    </div>
+
+    <div class="final-cta">
+      <h3>Start free. See the signals for yourself.</h3>
+      <p>Free to start. Upgrade only if you love it.</p>
+      <button class="btn-gold" type="button" data-goto="signals">See live signals</button>
+    </div>
+
+    <footer class="site-footer">
+      <nav class="footer-nav">
+        <button type="button" data-goto="home">Home</button>
+        <button type="button" data-goto="signals">Signals</button>
+        <button type="button" data-goto="results">Results</button>
+        <button type="button" data-goto="premium">Premium</button>
+      </nav>
+      <p class="footer-note">Onyx Binary Signal Bot — BETA. Trading binary options is high risk. Signals are information, not a guarantee of profit.</p>
+    </footer>
   </section>
 
   <!-- ============ SIGNALS ============ -->
@@ -108,7 +179,23 @@
 
     <p class="status" id="freeLimitNote"></p>
 
+    <div class="card generate-box" id="generateBox">
+      <h3>Generate new signal</h3>
+      <p class="lead">Tap a pair — get a 1-minute signal right away. No waiting for a setup.</p>
+      <div class="filter-row" id="generatePairs">
+        <button class="filter-btn" type="button" data-generate-pair="EUR/USD">EUR/USD</button>
+        <button class="filter-btn" type="button" data-generate-pair="GBP/USD">GBP/USD</button>
+        <button class="filter-btn" type="button" data-generate-pair="EUR/JPY">EUR/JPY</button>
+        <button class="filter-btn" type="button" data-generate-pair="USD/JPY">USD/JPY</button>
+        <button class="filter-btn" type="button" data-generate-pair="AUD/USD">AUD/USD</button>
+        <button class="filter-btn" type="button" data-generate-pair="USD/CAD">USD/CAD</button>
+      </div>
+      <p class="status" id="generateStatus"></p>
+    </div>
+
     <div class="ad-slot" data-ad-slot>Ad space</div>
+
+    <div id="generatedNow"></div>
 
     <div id="signalFeed"></div>
 
