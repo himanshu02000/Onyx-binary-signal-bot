@@ -1,374 +1,903 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="night">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Onyx Binary Signal Bot | Quotex, Olymp Trade, Pocket Option</title>
-<meta name="description" content="Onyx Binary Signal Bot — filtered trading signals from 3 private strategies: Elite, Turbo and Prime. Quotex, Olymp Trade, Pocket Option.">
-<link rel="stylesheet" href="css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onyx Binary Signal Bot — Quotex, Olymp Trade, Pocket Option</title>
+<meta name="description" content="Onyx Binary Signal Bot: filtered CALL / PUT signals for Quotex, Olymp Trade and Pocket Option. Three strategies — Elite, Turbo, Prime. Up to 10 signals a day. Premium 1.97 USDT / month.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafafc; --fg:#0a0a0a; --muted:rgba(0,0,0,.75); --faint:rgba(0,0,0,.4);
+    --card:#ffffff; --warm:#f6f1e7; --section:#f2f2f7; --border:rgba(0,0,0,.1);
+    --gold:#a87e0f; --gold-bright:#c9a227; --green:#2eb859; --red:#d63b2f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px}
+  header{max-width:880px;margin:0 auto;padding:28px 24px 0;display:flex;justify-content:space-between;align-items:center}
+  .logo{font-family:Fraunces,serif;font-weight:700;font-size:26px;letter-spacing:-.02em}
+  .logo span{color:var(--gold)}
+  .nav{font-size:14px;color:var(--muted);display:flex;gap:22px}
+  .nav a{color:inherit;text-decoration:none}
+  .eyebrow{text-align:center;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:72px 0 18px}
+  .acc-num{color:var(--gold);white-space:nowrap}
+  h1{font-family:Fraunces,serif;font-weight:700;font-size:clamp(44px,7vw,72px);line-height:1.05;letter-spacing:-.02em;text-align:center;margin:0}
+  .sub{max-width:620px;margin:28px auto 0;font-size:19px;line-height:1.6;text-align:center;color:rgba(0,0,0,.75)}
+  .sub b{color:var(--fg)}
+  .money{text-align:center;font-weight:700;font-size:18px;margin:22px 0 0}
+  .money span{color:var(--gold)}
+  .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:32px 0 12px}
+  .btn{display:inline-flex;align-items:center;min-height:54px;padding:0 30px;border-radius:999px;background:#0a0a0a;color:#fff;font-weight:600;font-size:16px;text-decoration:none}
+  .btn.ghost{background:rgba(0,0,0,.06);color:#0a0a0a}
+  .note{text-align:center;font-size:14px;color:var(--muted)}
+  .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:28px 0 0}
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:8px 14px;border:1px solid var(--border);border-radius:999px;background:#fff}
+  .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block}
+  .badge.beta{background:#0a0a0a;color:#fff;border-color:#0a0a0a}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:64px 0 0;text-align:center;background:linear-gradient(180deg,#fff 0%,#fff 92%,#f6f1e7 100%);border:1px solid var(--border);border-top:4px solid var(--gold-bright);border-radius:24px;padding:30px 12px;box-shadow:0 8px 28px rgba(169,126,15,.08)}
+  .stat + .stat{border-left:1px solid var(--border)}
+  .stat{opacity:.45;filter:grayscale(.5);transition:opacity .4s ease,filter .4s ease,transform .4s ease,background .4s ease;border-radius:16px;cursor:pointer}
+  .stat:hover,.stat.lit,.stat:active{opacity:1;filter:none;transform:translateY(-4px);background:#fff;box-shadow:0 10px 24px rgba(0,0,0,.08)}
+  .stat:hover .count,.stat.lit .count{color:var(--gold)}
+  .stat b{font-family:Fraunces,serif;font-size:34px;display:block}
+  .stat span{font-size:14px;color:var(--muted)}
+  .stat .miss-label{font-family:Fraunces,serif;font-size:24px;color:#0a0a0a;display:block;line-height:1.15;margin-bottom:6px}
+  section{padding:72px 0}
+  h2{font-family:Fraunces,serif;font-weight:700;font-size:clamp(32px,5vw,48px);line-height:1.1;letter-spacing:-.02em;margin:0 0 12px;text-align:center}
+  .lede{text-align:center;color:var(--muted);font-size:18px;line-height:1.6;max-width:620px;margin:0 auto 40px}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{background:#ffffff;border:1px solid var(--border);border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+  .card h3{font-family:Fraunces,serif;font-size:24px;margin:0 0 8px}
+  .card p{margin:0;color:rgba(0,0,0,.85);line-height:1.6;font-size:16px}
+  .count{display:inline-block;animation:pop .5s ease}
+  @keyframes pop{0%{transform:scale(.85);opacity:.4}100%{transform:scale(1);opacity:1}}
+  .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .compare .card ul{margin:14px 0 0;padding-left:20px;color:rgba(0,0,0,.85);line-height:1.8;font-size:16px}
+  .compare .good{background:var(--warm)}
+  .compare .card:first-child{background:#f4f4f6}
+  .compare .card:first-child li{color:rgba(0,0,0,.8)}
+  .offer{background:#0a0a0a;color:#fff;border-radius:32px;padding:44px 36px;text-align:center}
+  .offer h2{color:#fff}
+  .offer p{color:rgba(255,255,255,.7);line-height:1.6;font-size:17px;max-width:560px;margin:0 auto 14px}
+  .offer ol{list-style:none;padding:0;margin:28px auto;max-width:560px;text-align:left}
+  .offer li{padding:16px 0;border-top:1px solid rgba(255,255,255,.15);line-height:1.55}
+  .offer li b{display:block;font-size:18px}
+  .offer li span{color:rgba(255,255,255,.7)}
+  .offer .btn{background:#fff;color:#0a0a0a;margin-top:8px}
+  .price-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .price{font-family:Fraunces,serif;font-size:48px;margin:8px 0}
+  details{background:#ffffff;border:1px solid var(--border);border-radius:18px;padding:20px 22px;margin-bottom:12px}
+  summary{font-weight:600;cursor:pointer;font-size:17px}
+  details p{color:rgba(0,0,0,.85);line-height:1.6;margin:12px 0 0}
+  .final{text-align:center}
+  footer{padding:40px 0 64px;text-align:center;color:var(--faint);font-size:14px}
+  html{scroll-behavior:smooth}
+  .btn{transition:transform .25s ease,box-shadow .25s ease,background .25s ease}
+  .btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 12px 28px rgba(0,0,0,.22)}
+  .btn:active{transform:translateY(0) scale(.97)}
+  .btn.pulse{animation:btnpulse 2.4s ease-out infinite}
+  @keyframes btnpulse{0%{box-shadow:0 0 0 0 rgba(169,126,15,.45)}70%,100%{box-shadow:0 0 0 16px rgba(169,126,15,0)}}
+  /* --- interactive: tabs, reveal, hero --- */
+  .tabrow{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 20px;justify-content:center}
+  .tab{min-height:48px;padding:0 22px;border:2px solid #0a0a0a;border-radius:999px;font-weight:700;font-size:15px;cursor:pointer;background:transparent;color:#0a0a0a;font-family:Inter,system-ui,sans-serif}
+  .tab.active{background:#0a0a0a;color:#fff}
+  .panel{display:none}
+  .panel.active{display:block}
+  .strat-panel{border-radius:32px;padding:36px;background:#fff;border:1px solid var(--border);box-shadow:0 2px 12px rgba(0,0,0,.04)}
+  .strat-panel h3{font-family:Fraunces,serif;font-size:clamp(28px,3.5vw,40px);margin:0 0 10px;line-height:1.1}
+  .strat-panel p{line-height:1.6;font-size:16px}
+  .strat-panel ul{margin:16px 0 0;padding-left:20px;line-height:1.8;font-size:16px;color:rgba(0,0,0,.85)}
+  .strat-panel .pill{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+  @keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+  .hero-anim{animation:fadeup .7s ease both}
+  .hero-anim.d1{animation-delay:.1s}.hero-anim.d2{animation-delay:.25s}.hero-anim.d3{animation-delay:.4s}.hero-anim.d4{animation-delay:.55s}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  .card{transition:transform .3s ease,box-shadow .3s ease}
+  .card:hover{transform:translateY(-5px);box-shadow:0 12px 28px rgba(0,0,0,.1)}
+  details[open] summary{color:var(--gold)}
+  .sticky-cta{display:none;position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;background:#0a0a0a;color:#fff;border-radius:999px;min-height:56px;align-items:center;justify-content:center;gap:12px;font-weight:700;text-decoration:none;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+  .sticky-cta.show{display:flex}
+  /* --- signal card --- */
+  .signal-card{max-width:520px;margin:0 auto;background:#0a0a0a;color:#fff;border-radius:24px;padding:28px 28px 24px;box-shadow:0 20px 44px rgba(0,0,0,.28);text-align:left}
+  .signal-card .row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .signal-card .pair{font-family:Fraunces,serif;font-size:30px;font-weight:700}
+  .signal-card .dir{font-weight:700;font-size:15px;padding:8px 16px;border-radius:999px;background:var(--green);color:#fff}
+  .signal-card .dir.put{background:var(--red)}
+  .dir-pill{display:inline-block;font-weight:700;font-size:13px;padding:5px 12px;border-radius:999px;color:#fff}
+  .dir-pill.call{background:var(--green)}
+  .dir-pill.put{background:var(--red)}
+  .signal-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:880px;margin:0 auto}
+  .signal-grid .signal-card{margin:0;max-width:none}
+  .signal-card .meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:20px}
+  .signal-card .meta div{background:rgba(255,255,255,.08);border-radius:14px;padding:12px}
+  .signal-card .meta small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px}
+  .signal-card .meta b{font-size:16px}
+  .signal-card .foot{margin-top:18px;font-size:13px;color:rgba(255,255,255,.65);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .sample-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-bright);border:1px solid rgba(201,162,39,.5);border-radius:999px;padding:5px 10px}
+  /* --- compare table --- */
+  .vtable{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:24px;overflow:hidden}
+  .vtable th,.vtable td{padding:16px 18px;text-align:left;font-size:15px;border-top:1px solid var(--border)}
+  .vtable thead th{font-family:Fraunces,serif;font-size:19px;border-top:none}
+  .vtable thead th:last-child{color:var(--gold)}
+  .vtable td:last-child{font-weight:600}
+  .vtable .yes{color:var(--green);font-weight:700}
+  .vtable .no{color:rgba(0,0,0,.45)}
+  .table-wrap{overflow-x:auto;border-radius:24px}
+  /* --- results table --- */
+  .results{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:24px;overflow:hidden;font-size:15px}
+  .results th,.results td{padding:13px 16px;text-align:left;border-top:1px solid var(--border)}
+  .results thead th{border-top:none;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+  .win{color:var(--green);font-weight:700}
+  .loss{color:var(--red);font-weight:700}
+  /* --- steps --- */
+  .steps{counter-reset:step;list-style:none;padding:0;margin:28px auto;max-width:620px;text-align:left}
+  .steps li{counter-increment:step;position:relative;padding:0 0 20px 52px;line-height:1.6;font-size:16px}
+  .steps li::before{content:counter(step);position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;background:#0a0a0a;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .rules{list-style:none;padding:0;margin:0 auto;max-width:620px;text-align:left;counter-reset:rule}
+  .rules li{counter-increment:rule;position:relative;padding:16px 0 16px 52px;border-top:1px solid var(--border);line-height:1.6;font-size:16px}
+  .rules li::before{content:counter(rule);position:absolute;left:0;top:16px;width:34px;height:34px;border-radius:50%;background:var(--warm);color:var(--gold);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .risk{background:#fdf3f2;border:1px solid rgba(214,59,47,.25);border-radius:24px;padding:28px}
+  .risk h3{font-family:Fraunces,serif;font-size:24px;margin:0 0 10px;color:#8f1d14}
+  .risk p{margin:0;line-height:1.65;font-size:15px;color:rgba(0,0,0,.8)}
+  .broker-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .broker{text-align:center}
+  .broker h3{font-size:22px}
+  .broker .otc{display:inline-block;margin-top:10px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:6px 12px}
+  @media (max-width:760px){.broker-grid{grid-template-columns:1fr}.signal-grid{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion:reduce){.hero-anim,.reveal{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+  @media (max-width:640px){
+    .cards,.compare,.price-grid{grid-template-columns:1fr}
+    .stats{grid-template-columns:1fr;gap:0;padding:12px 24px}
+    .stat{padding:20px 0}
+    .stat + .stat{border-left:none;border-top:1px solid var(--border)}
+    .nav{display:none}
+    .offer{padding:36px 22px}
+    .signal-card .meta{grid-template-columns:1fr 1fr}
+  }
+  /* --- live wiring (added Nov 25): generate, chart, txid --- */
+  .generate-box{max-width:880px;margin:28px auto 0;text-align:center}
+  .generate-box .gen-line{font-size:15px;color:var(--muted);line-height:1.6;margin:0 0 16px}
+  .gen-pairs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .gen-btn{min-height:48px;padding:0 22px;border:2px solid #0a0a0a;border-radius:999px;font-weight:700;font-size:15px;cursor:pointer;background:#0a0a0a;color:#fff;font-family:Inter,system-ui,sans-serif}
+  .gen-btn:disabled{opacity:.5;cursor:wait}
+  .gen-status{font-size:14px;color:var(--muted);margin:14px 0 0;min-height:20px}
+  .gen-status.ok{color:var(--green);font-weight:600}
+  .gen-status.error{color:var(--red);font-weight:600}
+  .signal-card{cursor:pointer}
+  .signal-card.passed{opacity:.55}
+  .gen-note{margin:14px 0 0;font-size:14px;line-height:1.55;color:rgba(255,255,255,.85);background:rgba(255,255,255,.08);border-radius:12px;padding:10px 12px}
+  .chart-card{max-width:880px;margin:28px auto 0}
+  .chart-card h3{font-family:Fraunces,serif;font-size:24px;margin:0 0 8px;text-align:center}
+  .chart-wrap{height:440px;border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-top:14px}
+  .chart-wrap .tradingview-widget-container{height:440px}
+  .chart-wrap .tradingview-widget-container__widget{height:100%}
+  .chart-note{text-align:center;font-size:14px;color:var(--muted);margin:12px 0 0}
+  .wallet-code{display:block;font-family:ui-monospace,Menlo,monospace;font-size:13px;word-break:break-all;background:var(--warm);border:1px solid var(--border);border-radius:12px;padding:12px;margin-top:10px;cursor:pointer}
+  .net-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:0 0 16px}
+  .net-pill{min-height:48px;padding:0 22px;border:2px solid #0a0a0a;border-radius:999px;font-weight:700;font-size:15px;cursor:pointer;background:transparent;color:#0a0a0a;font-family:Inter,system-ui,sans-serif}
+  .net-pill.active{background:#0a0a0a;color:#fff}
+  .txid-box{max-width:620px;margin:40px auto 0;text-align:center}
+  .txid-box input{width:100%;min-height:54px;border:1px solid var(--border);border-radius:16px;padding:0 18px;font-size:16px;font-family:Inter,system-ui,sans-serif;margin-bottom:12px}
+  .txid-status{font-size:14px;line-height:1.6;color:var(--muted);margin:14px 0 0}
+  .txid-status.ok{color:var(--green);font-weight:600}
+  .txid-status.error{color:var(--red);font-weight:600}
+</style>
+<noscript><style>.reveal{opacity:1!important;transform:none!important}.panel{display:block!important}</style></noscript>
 </head>
 <body>
 
-<header class="app-header">
-  <div class="header-row">
-    <div class="brand">
-      <h1>Onyx<span class="onyx-dot"> ◆</span> Binary Signal Bot</h1>
-      <p>Quotex, Olymp Trade, Pocket Option</p>
-    </div>
-    <div class="header-toggles">
-      <button class="toggle-btn" id="themeToggle" type="button" aria-label="Switch day or night theme">☾ Night</button>
-      <button class="toggle-btn" id="planToggle" type="button" aria-label="Preview free or premium plan">Free preview</button>
-    </div>
-  </div>
+<header>
+  <div class="logo">Onyx<span>.</span></div>
+  <nav class="nav"><a href="#strategies">Strategies</a><a href="#signals">Signals</a><a href="#results">Results</a><a href="#premium">Premium</a><a href="#faq">FAQ</a></nav>
+  <a class="btn" href="#premium" style="min-height:44px;padding:0 22px;font-size:14px">Go Premium</a>
 </header>
 
-<div class="beta-banner">BETA — sample signals for testing only. No live signals yet.</div>
-
 <main>
-
-  <!-- ============ HOME ============ -->
-  <section class="screen active" id="screen-home">
-    <div class="hero">
-      <p class="hero-proof">3 private strategies · 3 brokers · 10 free signals a day</p>
-      <h2>The first bot with <span class="accent">98.76%</span> accuracy</h2>
-      <p class="lead">Welcome back. Today's best setups are being watched live.</p>
-      <div class="hero-cta">
-        <button class="btn-gold" type="button" data-goto="signals">See live signals</button>
-        <button class="btn-plain" type="button" data-goto="premium">Go Premium — 1.97 USDT/mo</button>
-      </div>
-      <p id="todayCount" class="status">Today's signals: —</p>
-      <div class="chips">
-        <span class="chip gold-chip">Verified</span>
-        <span class="chip gold-chip">Engine Live</span>
-        <span class="chip gold-chip">USDT payments only</span>
-        <span class="chip">BETA — SAMPLE DATA</span>
-      </div>
+  <div class="wrap">
+    <p class="eyebrow hero-anim d1">Binary signal bot &middot; Quotex &middot; Olymp Trade &middot; Pocket Option</p>
+    <h1 class="hero-anim d2">The first binary trading bot with <span class="acc-num"><span id="accCount">0.00</span>%</span> accuracy</h1>
+    <p class="sub hero-anim d3"><b>Welcome back. Today&rsquo;s best setups are being watched live.</b> Stop guessing CALL or PUT. Get the pair, direction, entry time and expiry &mdash; in one clean signal.</p>
+    <div class="badges hero-anim d4">
+      <span class="badge"><span class="dot"></span>Verified Engine Live</span>
+      <span class="badge">USDT payments only</span>
+      <span class="badge beta">Beta &mdash; Sample Data</span>
     </div>
-
-    <div class="ad-slot" data-ad-slot>Ad space</div>
-
-    <div class="stats">
-      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Private strategies</span></div>
-      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Brokers supported</span></div>
-      <div class="stat"><span class="stat-num">10</span><span class="stat-label">Free signals a day</span></div>
-      <div class="stat"><span class="stat-num">1.97</span><span class="stat-label">USDT / month Premium</span></div>
+    <div class="cta-row hero-anim d4">
+      <a class="btn pulse" href="#signals">See today&rsquo;s signals</a>
+      <a class="btn ghost" href="#premium">Go Premium &mdash; 1.97 USDT/mo</a>
     </div>
+    <p class="note">Free to test. Upgrade when ready &mdash; one payment, in USDT.</p>
 
-    <h3>What do you get?</h3>
-    <div class="features">
-      <div class="feature"><h4>A clear signal</h4><p>Pair, direction, entry time and expiry — one clean instruction.</p></div>
-      <div class="feature"><h4>Three brokers</h4><p>Olymp Trade, Quotex and Pocket Option. You place the trade on your own broker.</p></div>
-      <div class="feature"><h4>Free to start</h4><p>10 signals a day with ads. Premium removes the ads and unlocks everything.</p></div>
-      <div class="feature"><h4>Private methods</h4><p>Elite, Turbo and Prime stay private. You receive only the signal.</p></div>
+    <p style="text-align:center;color:var(--muted);font-size:14px;margin:48px 0 -48px">Hover over each one &mdash; this is what Premium gives you.</p>
+    <div class="stats" style="text-align:left">
+      <div class="stat" style="padding:0 22px"><div style="font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.07em">01</div><b style="font-size:44px;color:#0a0a0a;line-height:1"><span>&infin; Unlimited</span></b><span style="display:block;margin-top:8px;line-height:1.55"><b class="miss-label">Signal generation</b> &mdash; generated whenever a clean setup appears. No daily cap, still filtered, never forced. We would rather give you zero signals than one bad signal.</span></div>
+      <div class="stat" style="padding:0 22px"><div style="font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.07em">02</div><b style="font-size:44px;color:#0a0a0a;line-height:1"><span class="count" data-target="3" data-suffix=" strategies">3 strategies</span></b><span style="display:block;margin-top:8px;line-height:1.55"><b class="miss-label">Elite, Turbo, Prime</b> &mdash; patient and selective, fast and active, or real market only. Pick your style.</span></div>
+      <div class="stat" style="padding:0 22px"><div style="font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.07em">03</div><b style="font-size:44px;color:#0a0a0a;line-height:1"><span class="count" data-target="1.97" data-prefix="" data-suffix=" USDT" data-decimals="2">1.97 USDT</span></b><span style="display:block;margin-top:8px;line-height:1.55"><b class="miss-label">Premium, per month</b> &mdash; less than 0.07 USDT a day, for a full trading system for the whole month.</span></div>
     </div>
+    <p style="text-align:center;font-size:13px;color:var(--muted);margin:18px 0 0">Accuracy shown is the bot&rsquo;s stated figure. Signals are information, not a guarantee of profit. Your results will differ.</p>
+  </div>
 
-    <h3>Pick your broker</h3>
-    <div class="broker-grid">
-      <div class="broker-card"><div><strong>Olymp Trade</strong><span>Real market signals · OTC coming soon</span></div><button class="btn small secondary" type="button" data-broker-link="Olymp Trade">View signals</button></div>
-      <div class="broker-card"><div><strong>Quotex</strong><span>Real market signals · OTC coming soon</span></div><button class="btn small secondary" type="button" data-broker-link="Quotex">View signals</button></div>
-      <div class="broker-card"><div><strong>Pocket Option</strong><span>Real market signals · OTC coming soon</span></div><button class="btn small secondary" type="button" data-broker-link="Pocket Option">View signals</button></div>
-    </div>
-
-    <h3>Trading on your own, or with Onyx?</h3>
-    <div class="compare-cols">
-      <div class="compare-col">
-        <h4>Trading on your own</h4>
-        <ul>
-          <li>You watch the charts all day.</li>
-          <li>You guess CALL or PUT.</li>
-          <li>You enter late, with no expiry plan.</li>
-          <li>You repeat the same mistakes.</li>
-        </ul>
-      </div>
-      <div class="compare-col onyx-col">
-        <h4>With Onyx</h4>
-        <ul>
-          <li>Signals come to you, only when a setup is clean.</li>
-          <li>Each signal says CALL or PUT, entry time and expiry.</li>
-          <li>You take only the best setups — or none at all.</li>
-          <li>Every result is shown, win or loss.</li>
-        </ul>
+  <section id="brokers" class="reveal">
+    <div class="wrap">
+      <h2>Pick your broker</h2>
+      <p class="lede">Place trades on your own broker. Signals are shown for each broker as they come.</p>
+      <div class="broker-grid">
+        <div class="card broker"><h3>Olymp Trade</h3><p>Real market signals &middot; OTC coming soon</p><span class="otc">Real market</span></div>
+        <div class="card broker"><h3>Quotex</h3><p>Real market signals &middot; OTC coming soon</p><span class="otc">Real market</span></div>
+        <div class="card broker"><h3>Pocket Option</h3><p>Real market signals &middot; OTC coming soon</p><span class="otc">Real market</span></div>
       </div>
     </div>
-
-    <h3>Pick Your Style</h3>
-    <p class="lead">Elite = patient and selective. Turbo = fast and active. Prime = real market only, planned and calm. Change your pick any time. Premium unlocks all 3. The methods behind all 3 stay private — you receive only the signals.</p>
-
-    <div class="card strategy-tile">
-      <h3>ELITE — Few Signals. Best Quality.</h3>
-      <p>Quality over quantity. 5-10 minutes of analysis for carefully filtered signals.</p>
-      <p class="small">Our most selective strategy. Elite waits, and waits, and only releases a signal when everything is right. If nothing is right, Elite gives nothing that day. That patience is the value.</p>
-      <p class="small">You receive: Pair + CALL / PUT + Entry time + Expiry<br>Best for: Traders who want fewer, cleaner trades and can wait.<br>Markets: As shown on each signal card.</p>
-      <button class="btn small secondary" type="button" data-strategy-link="Elite">See Elite signals</button>
-    </div>
-
-    <div class="card strategy-tile">
-      <h3>TURBO — Fast Signals For Fast Traders.</h3>
-      <p>Instant signals with more frequent trading opportunities.</p>
-      <p class="small">Our fastest strategy. Turbo signals come with a short window to act, so they suit traders who are online, alert and ready. When there is no clear opportunity, Turbo stays silent — no forced trades.</p>
-      <p class="small">You receive: Pair + CALL / PUT + Entry time + Expiry<br>Best for: Active traders who like speed and can act on time.<br>Markets: As shown on each signal card.</p>
-      <button class="btn small secondary" type="button" data-strategy-link="Turbo">See Turbo signals</button>
-    </div>
-
-    <div class="card strategy-tile">
-      <h3>PRIME — Real Market. Planned Trades. <span class="badge real">REAL MARKET ONLY</span></h3>
-      <p>5-10 minutes of in-depth analysis for best accuracy signal.</p>
-      <p class="small">Our real-market strategy. Prime gives planned, calm signals for real-market pairs only. No OTC. No random trades in the middle of nowhere — only signals released when our private method says the time is right.</p>
-      <p class="small">You receive: Pair + CALL / PUT + Entry time + Expiry + REAL MARKET ONLY badge<br>Best for: Traders who trade real-market pairs and want planned trades, not noise.<br>Markets: Real market only — never OTC.</p>
-      <p class="small"><strong>Prime works on REAL MARKET only. Not for OTC pairs.</strong></p>
-      <button class="btn small secondary" type="button" data-strategy-link="Prime">See Prime signals</button>
-    </div>
-
-    <p class="small">What is common to every strategy: The method is private and is never shared. You do not need to learn it, study charts, or spend hours analysing. We do the work behind the scenes. You get one clean instruction: which pair, which direction, when to enter, and what expiry to use.</p>
-
-    <button class="btn" type="button" data-goto="signals">View Today's Signals</button>
-    <button class="btn secondary" type="button" data-goto="premium">Go Premium</button>
-
-    <div class="ad-slot" data-ad-slot>Ad space</div>
-
-    <h3>Questions, answered</h3>
-    <p class="lead">Before you start. The honest answers to what people ask first.</p>
-    <div class="card faq-list">
-      <div class="faq-item"><strong>Q: Are the signals live yet?</strong>Onyx is in beta. Signals are being tested right now, and sample signals are clearly marked SAMPLE. Past results do not guarantee future results.</div>
-      <div class="faq-item"><strong>Q: What do I get in Premium?</strong>All 3 strategies (Elite, Turbo, Prime), up to 5 signals a day, full pair, direction, entry time and expiry, full results history, no ads, priority support.</div>
-      <div class="faq-item"><strong>Q: How do I pay?</strong>USDT only. Two networks: BSC (BEP20) or Tron (TRC20). Steps are on the Premium screen. No UPI, no card.</div>
-      <div class="faq-item"><strong>Q: Which brokers can I use?</strong>Place trades on your own broker — for example Olymp Trade, Quotex or Pocket Option — as shown for each signal.</div>
-      <div class="faq-item"><strong>Q: Is Prime for OTC?</strong>No. Prime is REAL MARKET ONLY. Never use it on OTC pairs.</div>
-      <div class="faq-item"><strong>Q: How many signals a day?</strong>Up to 5. Some days fewer, if no clean setup comes. We never force a signal.</div>
-      <div class="faq-item"><strong>Q: Can I lose money?</strong>Yes. Trading is risky and no signal wins always. Use small, fixed risk and read the Risk page.</div>
-    </div>
-
-    <div class="final-cta">
-      <h3>Start free. See the signals for yourself.</h3>
-      <p>Free to start. Upgrade only if you love it.</p>
-      <button class="btn-gold" type="button" data-goto="signals">See live signals</button>
-    </div>
-
-    <footer class="site-footer">
-      <nav class="footer-nav">
-        <button type="button" data-goto="home">Home</button>
-        <button type="button" data-goto="signals">Signals</button>
-        <button type="button" data-goto="results">Results</button>
-        <button type="button" data-goto="premium">Premium</button>
-      </nav>
-      <p class="footer-note">Onyx Binary Signal Bot — BETA. Trading binary options is high risk. Signals are information, not a guarantee of profit.</p>
-    </footer>
   </section>
 
-  <!-- ============ SIGNALS ============ -->
-  <section class="screen" id="screen-signals">
-    <h2>Today's Signals <span class="badge sample">SAMPLE</span></h2>
-    <p class="lead">Only filtered setups are shown here. We would rather give you zero signals than one bad signal.</p>
-    <p class="status" id="signalsStatus">Loading signals…</p>
-
-    <h3>Broker</h3>
-    <div class="filter-row" id="brokerFilter">
-      <button class="filter-btn active" type="button" data-broker="All">All</button>
-      <button class="filter-btn" type="button" data-broker="Quotex">Quotex</button>
-      <button class="filter-btn" type="button" data-broker="Olymp Trade">Olymp Trade</button>
-      <button class="filter-btn" type="button" data-broker="Pocket Option">Pocket Option</button>
-    </div>
-
-    <h3>Strategy</h3>
-    <div class="filter-row" id="strategyFilter">
-      <button class="filter-btn active" type="button" data-strategy="All">All</button>
-      <button class="filter-btn" type="button" data-strategy="Elite">Elite</button>
-      <button class="filter-btn" type="button" data-strategy="Turbo">Turbo</button>
-      <button class="filter-btn" type="button" data-strategy="Prime">Prime</button>
-    </div>
-
-    <p class="status" id="freeLimitNote"></p>
-
-    <div class="card generate-box" id="generateBox">
-      <h3>Generate new signal</h3>
-      <p class="lead">Tap a pair — get a 1-minute signal right away. No waiting for a setup.</p>
-      <div class="filter-row" id="generatePairs">
-        <button class="filter-btn" type="button" data-generate-pair="EUR/USD">EUR/USD</button>
-        <button class="filter-btn" type="button" data-generate-pair="GBP/USD">GBP/USD</button>
-        <button class="filter-btn" type="button" data-generate-pair="EUR/JPY">EUR/JPY</button>
-        <button class="filter-btn" type="button" data-generate-pair="USD/JPY">USD/JPY</button>
-        <button class="filter-btn" type="button" data-generate-pair="AUD/USD">AUD/USD</button>
-        <button class="filter-btn" type="button" data-generate-pair="USD/CAD">USD/CAD</button>
+  <section id="strategies" class="reveal" style="background:var(--section)">
+    <div class="wrap">
+      <h2>Pick your style</h2>
+      <p class="lede">Elite = patient and selective. Turbo = fast and active. Prime = real market only, planned and calm. Change your pick any time. Premium unlocks all 3. The methods behind all 3 stay private &mdash; you receive only the signals.</p>
+      <div class="tabrow" role="group" aria-label="Choose a strategy">
+        <button type="button" class="tab active" data-tab="elite">Elite</button>
+        <button type="button" class="tab" data-tab="turbo">Turbo</button>
+        <button type="button" class="tab" data-tab="prime">Prime</button>
       </div>
-      <p class="status" id="generateStatus"></p>
-    </div>
 
-    <div class="ad-slot" data-ad-slot>Ad space</div>
-
-    <div id="generatedNow"></div>
-
-    <div id="signalFeed"></div>
-
-    <div class="empty-state hidden" id="emptyState">
-      <p><strong>No clean setup right now. We are watching. Please wait — patience is part of the strategy.</strong></p>
-    </div>
-
-    <h3>OTC pairs <span class="badge beta">Coming soon</span></h3>
-    <p class="lead">For now we use real pairs only. OTC signals are coming soon — no OTC signals yet.</p>
-    <div id="otcComingSoon"></div>
-
-    <h3>Live chart</h3>
-    <p class="chart-note">Real-market pairs only. The chart is for viewing — tap a signal to load its pair.</p>
-    <div class="chart-wrap">
-      <div class="tradingview-widget-container" id="tvContainer">
-        <div class="tradingview-widget-container__widget" id="tvWidget"></div>
+      <div class="panel active" id="panel-elite">
+        <div class="strat-panel">
+          <span class="pill">Elite &middot; Few signals. Best quality.</span>
+          <h3>Quality over quantity.</h3>
+          <p>Our most selective strategy. Elite waits, and waits, and only releases a signal when everything is right. If nothing is right, Elite gives nothing that day. That patience is the value.</p>
+          <ul>
+            <li><b>You receive:</b> Pair + CALL / PUT + Entry time + Expiry</li>
+            <li><b>Best for:</b> Traders who want fewer, cleaner trades and can wait.</li>
+            <li><b>Markets:</b> As shown on each signal card.</li>
+          </ul>
+        </div>
       </div>
+
+      <div class="panel" id="panel-turbo">
+        <div class="strat-panel">
+          <span class="pill">Turbo &middot; Fast signals for fast traders.</span>
+          <h3>Instant signals, more chances to trade.</h3>
+          <p>Our fastest strategy. Turbo signals come with a short window to act, so they suit traders who are online, alert and ready. When there is no clear opportunity, Turbo stays silent &mdash; no forced trades.</p>
+          <ul>
+            <li><b>You receive:</b> Pair + CALL / PUT + Entry time + Expiry</li>
+            <li><b>Best for:</b> Active traders who like speed and can act on time.</li>
+            <li><b>Markets:</b> As shown on each signal card.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-prime">
+        <div class="strat-panel">
+          <span class="pill">Prime &middot; Real market. Planned trades. Real market only.</span>
+          <h3>Planned, calm, real market only.</h3>
+          <p>Our real-market strategy. Prime gives planned, calm signals for real-market pairs only. No OTC. No random trades in the middle of nowhere &mdash; only signals released when our private method says the time is right.</p>
+          <ul>
+            <li><b>You receive:</b> Pair + CALL / PUT + Entry time + Expiry + REAL MARKET ONLY badge</li>
+            <li><b>Best for:</b> Traders who trade real-market pairs and want planned trades, not noise.</li>
+            <li><b>Markets:</b> Real market only &mdash; never OTC.</li>
+          </ul>
+          <p style="margin-top:16px"><b>Prime works on REAL MARKET only. Not for OTC pairs.</b></p>
+        </div>
+      </div>
+
+      <p style="text-align:center;color:var(--muted);font-size:15px;line-height:1.6;max-width:620px;margin:32px auto 0">What is common to every strategy: the method is private and is never shared. You do not need to learn it, study charts, or spend hours analysing. We do the work behind the scenes. You get one clean instruction: which pair, which direction, when to enter, and what expiry to use.</p>
     </div>
-    <p class="chart-note" id="chartNote">Showing EUR/USD (real market).</p>
   </section>
 
-  <!-- ============ RESULTS ============ -->
-  <section class="screen" id="screen-results">
-    <h2>Every Signal. Every Result. Nothing Hidden. <span class="badge sample">SAMPLE</span></h2>
-    <p class="lead">Win or loss, all past signals are shown here. Check the record yourself before you trust us.</p>
-    <p class="status" id="resultsStatus">Loading results…</p>
-    <p class="status" id="resultsNote"></p>
-    <div class="card" id="resultsList"></div>
-    <p class="small">Never edit a result after posting. A loss shown honestly builds more trust — and more renewals — than a fake perfect record.</p>
-    <div class="ad-slot" data-ad-slot>Ad space</div>
+  <section id="signals" class="reveal">
+    <div class="wrap">
+      <h2>Today&rsquo;s signals <span class="sample-tag" id="signalsTag">Sample</span></h2>
+      <p class="lede">Only filtered setups are shown here. We would rather give you zero signals than one bad signal.</p>
+      <div class="signal-grid" id="signalGrid">
+        <div class="signal-card" data-pair="EUR/USD">
+          <div class="row">
+            <span class="pair">EUR/USD</span>
+            <span class="dir">CALL &uarr;</span>
+          </div>
+          <div class="meta">
+            <div><small>Entry time</small><b>14:30 IST</b></div>
+            <div><small>Expiry</small><b>1 minute</b></div>
+            <div><small>Strategy</small><b>Elite</b></div>
+          </div>
+          <div class="foot"><span>Real market &middot; Showing EUR/USD (real market)</span><span>Sample signal</span></div>
+        </div>
+        <div class="signal-card" data-pair="GBP/JPY">
+          <div class="row">
+            <span class="pair">GBP/JPY</span>
+            <span class="dir put">PUT &darr;</span>
+          </div>
+          <div class="meta">
+            <div><small>Entry time</small><b>15:05 IST</b></div>
+            <div><small>Expiry</small><b>1 minute</b></div>
+            <div><small>Strategy</small><b>Turbo</b></div>
+          </div>
+          <div class="foot"><span>Real market &middot; Showing GBP/JPY (real market)</span><span>Sample signal</span></div>
+        </div>
+      </div>
+      <p style="text-align:center;color:var(--muted);font-size:15px;line-height:1.6;max-width:620px;margin:28px auto 0">Live signals load in the bot. The chart is for viewing &mdash; tap a signal to load its pair.</p>
+      <div class="generate-box">
+        <p class="gen-line">Tap a pair &mdash; get a 1-minute signal right away. No waiting for a setup.</p>
+        <div class="gen-pairs" id="generatePairs">
+          <button type="button" class="gen-btn" data-generate-pair="EUR/USD">EUR/USD</button>
+          <button type="button" class="gen-btn" data-generate-pair="GBP/USD">GBP/USD</button>
+          <button type="button" class="gen-btn" data-generate-pair="EUR/JPY">EUR/JPY</button>
+          <button type="button" class="gen-btn" data-generate-pair="USD/JPY">USD/JPY</button>
+          <button type="button" class="gen-btn" data-generate-pair="AUD/USD">AUD/USD</button>
+          <button type="button" class="gen-btn" data-generate-pair="USD/CAD">USD/CAD</button>
+        </div>
+        <p class="gen-status" id="generateStatus"></p>
+      </div>
+      <div class="card chart-card">
+        <h3>Live chart</h3>
+        <p style="text-align:center;color:var(--muted);font-size:15px;margin:0">Real-market pairs only. The chart is for viewing &mdash; tap a signal to load its pair.</p>
+        <div class="chart-wrap">
+          <div class="tradingview-widget-container" id="tvContainer">
+            <div class="tradingview-widget-container__widget" id="tvWidget"></div>
+          </div>
+        </div>
+        <p class="chart-note" id="chartNote">Showing EUR/USD (real market).</p>
+      </div>
+      <div class="card" style="max-width:520px;margin:24px auto 0;text-align:center">
+        <span class="tag">OTC pairs &middot; Coming soon</span>
+        <p>For now we use real pairs only. OTC signals are coming soon &mdash; no OTC signals yet.</p>
+      </div>
+    </div>
   </section>
 
-  <!-- ============ PREMIUM ============ -->
-  <section class="screen" id="screen-premium">
-    <h2>Trade Less. Trade Clear. Trade Only The Best Setups.</h2>
-    <p class="lead">3 proven strategy styles. Max 5 signals a day. No noise. No 24x7 chart watching.</p>
-    <p>Stop guessing CALL or PUT. Get the pair, direction, entry time and expiry — in one clean signal.</p>
-    <p>We wait for the setup. You take only the best ones.</p>
-
-    <div class="card">
-      <h3>The dream outcome</h3>
-      <p>Imagine opening the app, seeing 2-3 clean setups for the day, knowing exactly what to trade, when to enter, and for how long, taking only the ones that fit your strategy — and then closing the app. No stress. No revenge trading. No whole day lost on charts.</p>
-      <p>That is what Premium gives you.</p>
-    </div>
-
-    <div class="card">
-      <h3>The problem</h3>
-      <p>Most traders lose for 4 simple reasons:</p>
-      <ol class="steps">
-        <li>They trade too much — every candle, every move.</li>
-        <li>They have no fixed strategy — a new tip every day.</li>
-        <li>They enter late, with no entry zone and no expiry plan.</li>
-        <li>They have no record — so they repeat the same mistake daily.</li>
-      </ol>
-      <p>This bot fixes all 4.</p>
-      <p><strong>Fewer signals. Clear direction. Fixed rules. Full record.</strong></p>
-    </div>
-
-    <h3>What you get in Premium</h3>
-    <div class="card">
-      <div class="value-row"><span>All 3 strategies unlocked — Elite, Turbo and Prime. Pick your style, or use all 3.</span><span class="worth">Rs 999 / month</span></div>
-      <div class="value-row"><span>Up to 5 best signals every day — filtered, not random. We wait for the setup.</span><span class="worth">Rs 799 / month</span></div>
-      <div class="value-row"><span>Full signal details — pair, CALL / PUT, entry time, expiry and strategy name.</span><span class="worth">Rs 499 / month</span></div>
-      <div class="value-row"><span>Real Market filter for Prime — Prime signals are marked REAL MARKET ONLY, never OTC. No confusion.</span><span class="worth">Rs 299 / month</span></div>
-      <div class="value-row"><span>Private confirmation system — every signal passes multiple private checks before it is released to you. The method stays secret. You get only the final, clean signal.</span><span class="worth">Rs 299 / month</span></div>
-      <div class="value-row"><span>Results page — full history — every past signal and its result, open for all to see. No hiding.</span><span class="worth">Rs 199 / month</span></div>
-      <div class="value-row"><span>Trade journal template — record every trade, find your mistakes, improve fast.</span><span class="worth">Rs 249 (one time)</span></div>
-      <div class="value-row"><span>Discipline rules pack — 2-5 trades a day max, fixed risk, stop rules, profit booking rules. The rules that keep your account alive.</span><span class="worth">Rs 249 (one time)</span></div>
-      <div class="value-row"><span>No ads, no locked signals, no waiting — clean, fast, premium experience.</span><span class="worth">Rs 199 / month</span></div>
-      <p class="center" style="margin-top:12px;"><strong>Total value: Rs 3,500+ / month</strong></p>
-    </div>
-
-    <h3>Free vs Premium</h3>
-    <div class="card">
-      <table class="compare">
-        <tr><th>Feature</th><th>Free</th><th>Premium — 1.97 USDT/mo</th></tr>
-        <tr><td>Signals per day</td><td>1-2 sample signals</td><td>Up to 5 best signals</td></tr>
-        <tr><td>Strategies</td><td>1 strategy only</td><td>All 3 — Elite, Turbo, Prime</td></tr>
-        <tr><td>Full signal details (entry time, expiry)</td><td>Locked</td><td>Full details</td></tr>
-        <tr><td>Prime — Real Market signals</td><td>Locked</td><td>Unlocked</td></tr>
-        <tr><td>Results history</td><td>Today only</td><td>Full history</td></tr>
-        <tr><td>Trade journal + discipline pack</td><td>No</td><td>Yes</td></tr>
-        <tr><td>Ads</td><td>Yes</td><td>No ads</td></tr>
-        <tr><td>Support</td><td>Normal</td><td>Priority — first reply</td></tr>
-      </table>
-      <p class="small">Free is for testing. Premium is for trading with a full system. Start free. Upgrade when ready — one payment, in USDT.</p>
-    </div>
-
-    <div class="card center">
-      <p>Your price today:</p>
-      <p class="price-big">1.97 USDT <small>/ month</small></p>
-      <p>That is less than 0.07 USDT a day — for a full trading system for the whole month.</p>
-      <p class="small">You are not paying for tips. You are paying for a complete system — signals, entry time, expiry, record and discipline — in one place.</p>
-    </div>
-
-    <h3>Go Premium — 1.97 USDT / month</h3>
-    <p>Pay in USDT only. Choose your network:<br>Option 1: BSC (BEP20) &nbsp;|&nbsp; Option 2: Tron (TRC20)<br>Same Premium. Same price value. Pick the network your wallet supports.</p>
-
-    <div class="card">
-      <label>Network</label>
-      <div class="network-row" id="networkPicker">
-        <button class="filter-btn active" type="button" data-network="BSC">BSC (BEP20)</button>
-        <button class="filter-btn" type="button" data-network="Tron">Tron (TRC20)</button>
+  <section id="results" class="reveal" style="background:var(--section)">
+    <div class="wrap">
+      <h2>Every signal. Every result. Nothing hidden. <span class="sample-tag" id="resultsTag">Sample</span></h2>
+      <p class="lede">Win or loss, all past signals are shown here. Check the record yourself before you trust us.</p>
+      <div class="table-wrap">
+        <table class="results">
+          <thead><tr><th>Date</th><th>Pair</th><th>Direction</th><th>Strategy</th><th>Result</th></tr></thead>
+          <tbody id="resultsBody">
+            <tr><td>Sample</td><td>EUR/USD</td><td><span class="dir-pill call">CALL</span></td><td>Elite</td><td class="win">WIN</td></tr>
+            <tr><td>Sample</td><td>GBP/JPY</td><td><span class="dir-pill put">PUT</span></td><td>Turbo</td><td class="win">WIN</td></tr>
+            <tr><td>Sample</td><td>AUD/USD</td><td><span class="dir-pill put">PUT</span></td><td>Prime</td><td class="loss">LOSS</td></tr>
+            <tr><td>Sample</td><td>EUR/GBP</td><td><span class="dir-pill call">CALL</span></td><td>Elite</td><td class="win">WIN</td></tr>
+            <tr><td>Sample</td><td>USD/JPY</td><td><span class="dir-pill put">PUT</span></td><td>Turbo</td><td class="win">WIN</td></tr>
+          </tbody>
+        </table>
       </div>
-      <label>Wallet address — <span id="networkLabel">BSC (BEP20)</span></label>
-      <div class="wallet-box"><span class="not-set">Wallet address not set yet — premium checkout is disabled in this beta build.</span></div>
-      <p class="small">USDT amount for the plan: <strong>1.97 USDT</strong> — same on both networks, shown big on checkout.</p>
-      <p class="small">Send USDT only, on the exact network selected. Wrong network = payment may be lost.</p>
+      <p style="text-align:center;color:var(--muted);font-size:15px;line-height:1.6;max-width:620px;margin:28px auto 0">Sample rows shown while the bot is in beta. Never edit a result after posting. A loss shown honestly builds more trust &mdash; and more renewals &mdash; than a fake perfect record.</p>
+    </div>
+  </section>
 
-      <ol class="steps">
-        <li>Copy the wallet address for the network you picked — BSC or Tron.</li>
+  <section class="reveal">
+    <div class="wrap">
+      <h2>Trade less. Trade clear. Trade only the best setups.</h2>
+      <p class="lede">3 proven strategy styles. Max 10 signals a day. No noise. No 24x7 chart watching.</p>
+      <div class="compare">
+        <div class="card">
+          <span class="tag" style="color:var(--red)">The problem</span>
+          <h3>Most traders lose for 4 simple reasons</h3>
+          <ul>
+            <li>They trade too much &mdash; every candle, every move.</li>
+            <li>They have no fixed strategy &mdash; a new tip every day.</li>
+            <li>They enter late, with no entry zone and no expiry plan.</li>
+            <li>They have no record &mdash; so they repeat the same mistake daily.</li>
+          </ul>
+        </div>
+        <div class="card good">
+          <span class="tag">The dream outcome</span>
+          <h3>Imagine this instead</h3>
+          <p>Opening the app, seeing 2&ndash;3 clean setups for the day, knowing exactly what to trade, when to enter, and for how long, taking only the ones that fit your strategy &mdash; and then closing the app. No stress. No revenge trading. No whole day lost on charts.</p>
+          <p style="margin-top:14px"><b>This bot fixes all 4. Fewer signals. Clear direction. Fixed rules. Full record.</b></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="premium" class="reveal">
+    <div class="wrap">
+      <div class="offer">
+        <span class="tag" style="color:var(--gold-bright)">Premium &middot; 1.97 USDT / month</span>
+        <h2>What you get in Premium</h2>
+        <p>That is less than 0.07 USDT a day &mdash; for a full trading system for the whole month. You are not paying for tips. You are paying for a complete system &mdash; signals, entry time, expiry, record and discipline &mdash; in one place.</p>
+        <ol>
+          <li><b>All 3 strategies unlocked &mdash; Elite, Turbo and Prime</b><span>Pick your style, or use all 3. &middot; Rs 999 / month</span></li>
+          <li><b>Up to 5 best signals every day</b><span>Filtered, not random. We wait for the setup. &middot; Rs 799 / month</span></li>
+          <li><b>Full signal details</b><span>Pair, CALL / PUT, entry time, expiry and strategy name. &middot; Rs 499 / month</span></li>
+          <li><b>Real Market filter for Prime</b><span>Prime signals are marked REAL MARKET ONLY, never OTC. No confusion. &middot; Rs 299 / month</span></li>
+          <li><b>Private confirmation system</b><span>Every signal passes multiple private checks before it is released to you. The method stays secret. You get only the final, clean signal. &middot; Rs 299 / month</span></li>
+          <li><b>Results page &mdash; full history</b><span>Every past signal and its result, open for all to see. No hiding. &middot; Rs 199 / month</span></li>
+          <li><b>Trade journal template</b><span>Record every trade, find your mistakes, improve fast. &middot; Rs 249 (one time)</span></li>
+          <li><b>Discipline rules pack</b><span>2&ndash;5 trades a day max, fixed risk, stop rules, profit booking rules. The rules that keep your account alive. &middot; Rs 249 (one time)</span></li>
+          <li><b>No ads, no locked signals, no waiting</b><span>Clean, fast, premium experience. &middot; Rs 199 / month</span></li>
+        </ol>
+        <p style="font-size:15px">Total value: <b style="color:#fff">Rs 3,500+ / month</b></p>
+        <p style="font-family:Fraunces,serif;font-size:44px;color:#fff;margin:10px 0 4px">1.97 USDT <span style="font-size:20px;color:rgba(255,255,255,.7)">/ month</span></p>
+        <a class="btn" href="#pay">Go Premium now</a>
+        <p style="margin-top:16px;font-size:14px">30 days of Premium from activation.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal" style="padding-top:0">
+    <div class="wrap">
+      <h2>Free vs Premium</h2>
+      <p class="lede">Free is for testing. Premium is for trading with a full system. Start free. Upgrade when ready &mdash; one payment, in USDT.</p>
+      <div class="table-wrap">
+        <table class="vtable">
+          <thead><tr><th>Feature</th><th>Free</th><th>Premium &mdash; 1.97 USDT/mo</th></tr></thead>
+          <tbody>
+            <tr><td>Signals per day</td><td>1&ndash;2 sample signals</td><td>Unlimited signals</td></tr>
+            <tr><td>Strategies</td><td>1 strategy only</td><td>All 3 &mdash; Elite, Turbo, Prime</td></tr>
+            <tr><td>Full signal details (entry time, expiry)</td><td class="no">Locked</td><td class="yes">Full details</td></tr>
+            <tr><td>Prime &mdash; Real Market signals</td><td class="no">Locked</td><td class="yes">Unlocked</td></tr>
+            <tr><td>Results history</td><td>Today only</td><td>Full history</td></tr>
+            <tr><td>Trade journal + discipline pack</td><td class="no">No</td><td class="yes">Yes</td></tr>
+            <tr><td>Ads</td><td>Yes</td><td>No ads</td></tr>
+            <tr><td>Support</td><td>Normal</td><td>Priority &mdash; first reply</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="pay" class="reveal" style="background:var(--section)">
+    <div class="wrap">
+      <h2>Go Premium &mdash; 1.97 USDT / month</h2>
+      <p class="lede">Pay in USDT only. Choose your network. Same Premium. Same price. Pick the network your wallet supports.</p>
+      <div class="price-grid">
+        <div class="card" style="text-align:center">
+          <span class="tag">Option 1 &middot; BSC (BEP20)</span>
+          <div class="price">1.97 USDT</div>
+          <p>Wallet address &mdash; BSC (BEP20)</p>
+          <p style="margin-top:10px;font-weight:600" id="walletBscLine">Wallet address not set yet &mdash; premium checkout is disabled in this beta build.</p>
+        </div>
+        <div class="card" style="text-align:center">
+          <span class="tag">Option 2 &middot; Tron (TRC20)</span>
+          <div class="price">1.97 USDT</div>
+          <p>Wallet address &mdash; Tron (TRC20)</p>
+          <p style="margin-top:10px;font-weight:600" id="walletTronLine">Wallet address not set yet &mdash; premium checkout is disabled in this beta build.</p>
+        </div>
+      </div>
+      <ol class="steps" style="margin-top:40px">
+        <li>Copy the wallet address for the network you picked &mdash; BSC or Tron.</li>
         <li>Send the exact USDT amount shown on screen to that address, on that same network only.</li>
         <li>Copy your Transaction ID (TXID / Hash) after sending.</li>
         <li>Paste the TXID in the bot and tap Confirm.</li>
         <li>Wait for verification. Premium starts after your payment is confirmed.</li>
       </ol>
-
-      <label for="txidInput">Your Transaction ID (TXID / Hash)</label>
-      <input type="text" id="txidInput" placeholder="Paste your TXID here" autocomplete="off">
-      <button class="btn" type="button" id="txidSubmit">Confirm Payment</button>
-      <p class="status" id="txidStatus"></p>
-
-      <p class="small"><strong>Read before you send:</strong></p>
-      <ol class="steps small">
-        <li>Send USDT only. Do not send any other coin to these addresses.</li>
-        <li>Match the network: BSC address gets BSC (BEP20) USDT only. Tron address gets Tron (TRC20) USDT only.</li>
-        <li>Double-check the address before sending. Crypto payments cannot be reversed.</li>
-        <li>Keep your TXID safe until Premium is active.</li>
-      </ol>
-      <p class="small">30 days of Premium from activation. Pay USDT only, on BSC (BEP20) or Tron (TRC20). Send on the correct network only — wrong-network payments may be lost and cannot be reversed. By paying, you accept the Risk Warning above.</p>
+      <div class="txid-box" id="txidBox">
+        <h3 style="font-family:Fraunces,serif;font-size:24px;margin:0 0 8px">Confirm your payment</h3>
+        <p style="color:var(--muted);font-size:15px;line-height:1.6;margin:0 0 16px">Sent the USDT? Pick the network you used, paste your TXID and tap Confirm.</p>
+        <div class="net-pills" id="txidNetwork">
+          <button type="button" class="net-pill active" data-network="BSC">BSC (BEP20)</button>
+          <button type="button" class="net-pill" data-network="Tron">Tron (TRC20)</button>
+        </div>
+        <input type="text" id="txidInput" placeholder="Paste your TXID / Hash here" autocomplete="off" spellcheck="false">
+        <button type="button" class="btn" id="txidSubmit" style="border:none;cursor:pointer">Confirm payment</button>
+        <p class="txid-status" id="txidStatus"></p>
+      </div>
+      <div class="card" style="max-width:620px;margin:0 auto">
+        <span class="tag" style="color:var(--red)">Read before you send</span>
+        <ul style="margin:12px 0 0;padding-left:20px;line-height:1.8;font-size:16px;color:rgba(0,0,0,.85)">
+          <li>Send USDT only. Do not send any other coin to these addresses.</li>
+          <li>Match the network: BSC address gets BSC (BEP20) USDT only. Tron address gets Tron (TRC20) USDT only.</li>
+          <li>Double-check the address before sending. Crypto payments cannot be reversed.</li>
+          <li>Keep your TXID safe until Premium is active.</li>
+        </ul>
+      </div>
+      <p style="text-align:center;color:var(--muted);font-size:14px;margin-top:24px">Send USDT only, on BSC (BEP20) or Tron (TRC20). Send on the correct network only &mdash; wrong-network payments may be lost and cannot be reversed. By paying, you accept the Risk Warning below.</p>
     </div>
+  </section>
 
-    <h3>The 7 Rules — discipline pack</h3>
-    <div class="card">
+  <section class="reveal">
+    <div class="wrap">
+      <h2>The 7 rules &mdash; discipline pack</h2>
+      <p class="lede">The rules that keep your account alive.</p>
       <ol class="rules">
         <li>Stick to one strategy for one full month. Do not change every week.</li>
         <li>No signal = no trade. Never force a trade.</li>
-        <li>Max 2-5 trades a day. More trades does not mean more money.</li>
+        <li>Max 2&ndash;5 trades a day. More trades does not mean more money.</li>
         <li>Risk only a small, fixed part of your capital per trade.</li>
         <li>Do not chase a missed signal. The next one will come.</li>
         <li>Book profit and withdraw regularly.</li>
-        <li>Write every trade in your journal — win or loss.</li>
+        <li>Write every trade in your journal &mdash; win or loss.</li>
       </ol>
     </div>
-
-    <h3>FAQ</h3>
-    <div class="card">
-      <div class="faq-item"><strong>Q: What do I get in Premium?</strong>All 3 strategies (Elite, Turbo, Prime), up to 5 signals a day, full pair, direction, entry time and expiry, full results history, no ads, priority support.</div>
-      <div class="faq-item"><strong>Q: How do I pay?</strong>USDT only. Two networks: BSC (BEP20) or Tron (TRC20). Steps are on the Premium screen. No UPI, no card.</div>
-      <div class="faq-item"><strong>Q: Which brokers can I use?</strong>Place trades on your own broker — for example Olymp Trade, Quotex or Pocket Option — as shown for each signal.</div>
-      <div class="faq-item"><strong>Q: Is Prime for OTC?</strong>No. Prime is REAL MARKET ONLY. Never use it on OTC pairs.</div>
-      <div class="faq-item"><strong>Q: How many signals a day?</strong>Up to 5. Some days fewer, if no clean setup comes. We never force a signal.</div>
-      <div class="faq-item"><strong>Q: Can I lose money?</strong>Yes. Trading is risky and no signal wins always. Use small, fixed risk and read the Risk page.</div>
-    </div>
-
-    <div class="risk-box">
-      <strong>RISK WARNING</strong>
-      <p>Trading binary options is high risk. You can lose part or all of your money. Signals are information, not a guarantee of profit. No strategy wins every trade. Never trade with money you cannot afford to lose. Never borrow money to trade. Past results do not promise future results. The decision to place any trade is fully yours.</p>
-    </div>
-
-    <button class="btn" type="button" id="premiumCta">Unlock Premium — 1.97 USDT/month</button>
-    <p class="small center">30 days of Premium from activation. Pay USDT only, on BSC (BEP20) or Tron (TRC20).</p>
   </section>
 
+  <section id="faq" class="reveal" style="background:var(--section)">
+    <div class="wrap">
+      <h2>FAQ</h2>
+      <p class="lede">Everything else, answered plainly.</p>
+      <details>
+        <summary>What do I get in Premium?</summary>
+        <p>All 3 strategies (Elite, Turbo, Prime), up to 10 signals a day, full pair, direction, entry time and expiry, full results history, no ads, priority support.</p>
+      </details>
+      <details>
+        <summary>How do I pay?</summary>
+        <p>USDT only. Two networks: BSC (BEP20) or Tron (TRC20). Steps are on the Premium screen. No UPI, no card.</p>
+      </details>
+      <details>
+        <summary>Which brokers can I use?</summary>
+        <p>Place trades on your own broker &mdash; for example Olymp Trade, Quotex or Pocket Option &mdash; as shown for each signal.</p>
+      </details>
+      <details>
+        <summary>Is Prime for OTC?</summary>
+        <p>No. Prime is REAL MARKET ONLY. Never use it on OTC pairs.</p>
+      </details>
+      <details>
+        <summary>How many signals a day?</summary>
+        <p>Up to 10. Some days fewer, if no clean setup comes. We never force a signal.</p>
+      </details>
+      <details>
+        <summary>Can I lose money?</summary>
+        <p>Yes. Trading is risky and no signal wins always. Use small, fixed risk and read the Risk Warning below.</p>
+      </details>
+      <div class="risk" style="margin-top:32px">
+        <h3>Risk warning</h3>
+        <p>Trading binary options is high risk. You can lose part or all of your money. Signals are information, not a guarantee of profit. No strategy wins every trade. Never trade with money you cannot afford to lose. Never borrow money to trade. Past results do not promise future results. The decision to place any trade is fully yours.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="final reveal">
+    <div class="wrap">
+      <h2>Trade less. Trade clear.</h2>
+      <p class="lede">Start free. Upgrade when ready &mdash; 1.97 USDT / month.</p>
+      <div class="cta-row">
+        <a class="btn pulse" href="#premium">Go Premium &mdash; 1.97 USDT/mo</a>
+        <a class="btn ghost" href="#signals">See today&rsquo;s signals</a>
+      </div>
+    </div>
+  </section>
 </main>
 
-<nav class="bottom-nav">
-  <button class="nav-btn active" type="button" data-goto="home"><span class="nav-icon">◆</span>Home</button>
-  <button class="nav-btn" type="button" data-goto="signals"><span class="nav-icon">▲</span>Signals</button>
-  <button class="nav-btn" type="button" data-goto="results"><span class="nav-icon">✓</span>Results</button>
-  <button class="nav-btn" type="button" data-goto="premium"><span class="nav-icon">★</span>Premium</button>
-</nav>
+<footer>
+  <p>Onyx Binary Signal Bot &mdash; Quotex &middot; Olymp Trade &middot; Pocket Option</p>
+  <p>Signals are information, not a guarantee of profit. 30 days of Premium from activation.</p>
+</footer>
 
-<script src="js/app.js"></script>
+<a class="sticky-cta" href="#premium" id="stickyCta">Go Premium &mdash; 1.97 USDT/mo</a>
+
+<script>
+  // Hero accuracy count-up: 0.00 -> 98.76
+  (function(){
+    var el = document.getElementById('accCount');
+    if (!el) return;
+    var target = 98.76, dur = 1800, start = null;
+    function step(ts){
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = (target * eased).toFixed(2);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    setTimeout(function(){ requestAnimationFrame(step); }, 450);
+  })();
+  // Tabs
+  document.querySelectorAll('.tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+      var panel = document.getElementById('panel-' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+  // Count-up
+  var counted = false;
+  function countUp(){
+    if (counted) return;
+    var el = document.querySelector('.stats');
+    if (!el) return;
+    var rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0){
+      counted = true;
+      document.querySelectorAll('.count').forEach(function(node){
+        var target = parseFloat(node.dataset.target);
+        var decimals = parseInt(node.dataset.decimals || '0', 10);
+        var suffix = node.dataset.suffix || '';
+        var start = null, dur = 900;
+        function step(ts){
+          if (!start) start = ts;
+          var p = Math.min((ts - start) / dur, 1);
+          var val = target * (1 - Math.pow(1 - p, 3));
+          node.textContent = val.toFixed(decimals) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }
+  }
+  // Reveal on scroll + sticky CTA
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if (e.isIntersecting) e.target.classList.add('in'); });
+  }, {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  var cta = document.getElementById('stickyCta');
+  window.addEventListener('scroll', function(){
+    countUp();
+    if (cta) cta.classList.toggle('show', window.scrollY > 700);
+  }, {passive:true});
+  countUp();
+
+  // --- Live wiring (added Nov 25): signals, generate, chart, results, pay ---
+  // The page is static; live data comes from the Onyx API. If the API is
+  // unreachable or returns nothing, the sample content above stays as-is.
+  var API_BASE = 'https://onyx-signal-bot.onrender.com/api';
+  try {
+    var _apiQ = new URLSearchParams(window.location.search).get('api');
+    if (_apiQ) { API_BASE = _apiQ.replace(/\/$/, ''); }
+    else { var _apiS = window.localStorage.getItem('onyx_api_base'); if (_apiS) API_BASE = _apiS.replace(/\/$/, ''); }
+  } catch (e) {}
+  var PLAN = 'free';
+  try { PLAN = window.localStorage.getItem('onyx_plan') || 'free'; } catch (e) {}
+  var TV_SYMBOLS = {'EUR/USD':'FX:EURUSD','GBP/USD':'FX:GBPUSD','USD/JPY':'FX:USDJPY','EUR/JPY':'FX:EURJPY','AUD/USD':'FX:AUDUSD','USD/CAD':'FX:USDCAD'};
+  var STRATEGY_DISPLAY = {elite:'Elite',turbo:'Turbo',prime:'Prime',ha_fade:'HA-fade',momentum:'Momentum'};
+  var BROKER_DISPLAY = {finnhub:'Finnhub',quotex:'Quotex',olymp_trade:'Olymp Trade',pocket_option:'Pocket Option'};
+  var generatedSignal = null;
+  var liveSignals = [];
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function $(id){ return document.getElementById(id); }
+  function istTime(iso){
+    if (!iso) return '';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return String(iso);
+    var t = new Date(d.getTime() + 330 * 60000); // IST = UTC + 5:30
+    var hh = t.getUTCHours(), mm = t.getUTCMinutes();
+    return (hh < 10 ? '0' + hh : '' + hh) + ':' + (mm < 10 ? '0' + mm : '' + mm) + ' IST';
+  }
+  function fetchJson(path){
+    var controller = new AbortController();
+    var timer = setTimeout(function(){ controller.abort(); }, 6000);
+    return fetch(API_BASE + path, {signal: controller.signal})
+      .finally(function(){ clearTimeout(timer); })
+      .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); });
+  }
+  function postJson(path, body){
+    return fetch(API_BASE + path, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)})
+      .then(function(res){ return res.json().then(function(b){ if (!res.ok) throw new Error((b && b.detail) || ('HTTP ' + res.status)); return b; }); });
+  }
+
+  // ---------- Signal cards (same .signal-card markup as the sample cards) ----------
+  function signalCardHtml(s, opts){
+    opts = opts || {};
+    var dirUp = String(s.direction || '').toUpperCase();
+    var isCall = dirUp === 'CALL';
+    var entryTxt = s.locked ? 'Locked' : istTime(s.entry);
+    var expiryTxt = s.locked ? 'Locked' : (s.expiry || '1 min');
+    var strat = STRATEGY_DISPLAY[String(s.strategy || '').toLowerCase()] || s.strategy || '';
+    var passed = !s.locked && !!s.entry && (new Date(s.entry).getTime() < Date.now());
+    var footRight = opts.generated ? 'Generated now' : (s.locked ? 'Locked — Premium' : (passed ? 'Entry passed' : 'Live signal'));
+    var cls = 'signal-card' + ((passed || s.locked) ? ' passed' : '');
+    var quickNote = (opts.generated && s.source === 'quick_read')
+      ? '<div class="gen-note">Momentum &mdash; a quick read of the last candle, not a strategy setup.</div>' : '';
+    return '<div class="' + cls + '" data-pair="' + esc(s.pair) + '">' +
+      '<div class="row"><span class="pair">' + esc(s.pair) + '</span>' +
+      '<span class="' + (isCall ? 'dir' : 'dir put') + '">' + esc(dirUp) + ' ' + (isCall ? '&uarr;' : '&darr;') + '</span></div>' +
+      '<div class="meta">' +
+      '<div><small>Entry time</small><b>' + esc(entryTxt) + '</b></div>' +
+      '<div><small>Expiry</small><b>' + esc(expiryTxt) + '</b></div>' +
+      '<div><small>Strategy</small><b>' + esc(strat) + '</b></div>' +
+      '</div>' + quickNote +
+      '<div class="foot"><span>Real market &middot; Showing ' + esc(s.pair) + ' (real market)</span><span>' + esc(footRight) + '</span></div>' +
+      '</div>';
+  }
+  function renderSignalGrid(){
+    var grid = $('signalGrid');
+    if (!grid) return;
+    if (!liveSignals.length && !generatedSignal) return; // keep the file's sample cards
+    var html = '';
+    if (generatedSignal) html += signalCardHtml(generatedSignal, {generated:true});
+    liveSignals.forEach(function(s){
+      if (generatedSignal && String(s.id) === String(generatedSignal.id)) return; // no duplicate card
+      html += signalCardHtml(s);
+    });
+    grid.innerHTML = html;
+    var tag = $('signalsTag');
+    if (tag) tag.textContent = 'Live';
+  }
+  function loadLiveSignals(){
+    fetchJson('/signals?plan=' + PLAN + '&limit=10')
+      .then(function(body){
+        var rows = Array.isArray(body) ? body : (body.signals || []);
+        rows = rows.filter(function(r){ return String(r.market || 'Real').toLowerCase() !== 'otc'; });
+        if (!rows.length) return; // keep the sample cards
+        liveSignals = rows.map(function(r){
+          return {id:r.id, pair:r.pair, direction:String(r.direction || '').toUpperCase(),
+            entry:r.entry, expiry:r.expiry, strategy:r.strategy, broker:r.broker,
+            locked:!!r.locked, source:r.source || null};
+        });
+        renderSignalGrid();
+      })
+      .catch(function(){ /* API down — sample cards stay */ });
+  }
+
+  // ---------- Generate new signal (on-demand, 1-minute) ----------
+  function setGenerateButtons(disabled, busyPair){
+    document.querySelectorAll('#generatePairs .gen-btn').forEach(function(b){
+      b.disabled = disabled;
+      b.textContent = (disabled && b.getAttribute('data-generate-pair') === busyPair) ? 'Generating…' : b.getAttribute('data-generate-pair');
+    });
+  }
+  $('generatePairs').addEventListener('click', function(e){
+    var btn = e.target.closest('[data-generate-pair]');
+    if (!btn || btn.disabled) return;
+    var pair = btn.getAttribute('data-generate-pair');
+    var status = $('generateStatus');
+    status.textContent = '';
+    status.className = 'gen-status';
+    setGenerateButtons(true, pair);
+    postJson('/signals/generate', {pair: pair, plan: PLAN})
+      .then(function(body){
+        var s = body.signal || {};
+        generatedSignal = {id:s.id, pair:s.pair, direction:String(s.direction || '').toUpperCase(),
+          entry:s.entry || s.entry_time, expiry:s.expiry || '1 min',
+          strategy:s.strategy_key || s.strategy, broker:s.broker, locked:false, source:s.source || null};
+        renderSignalGrid();
+        loadChart(pair);
+        status.textContent = body.free_limit_remaining == null
+          ? 'Signal generated for ' + pair + '.'
+          : 'Signal generated for ' + pair + '. ' + body.free_limit_remaining + ' free signals left today.';
+        status.className = 'gen-status ok';
+        loadLiveSignals(); // refresh the feed so the count stays true
+      })
+      .catch(function(err){
+        status.textContent = (err && err.message) || 'Could not generate a signal right now. Please try again.';
+        status.className = 'gen-status error';
+      })
+      .finally(function(){ setGenerateButtons(false); });
+  });
+
+  // ---------- Live chart (TradingView, fixed 440px height so it is never cut off) ----------
+  function loadChart(pair){
+    var symbol = TV_SYMBOLS[pair];
+    var container = $('tvWidget');
+    var note = $('chartNote');
+    if (!symbol || !container) {
+      if (note) note.textContent = 'Chart is available for real-market pairs only.';
+      return;
+    }
+    container.innerHTML = '';
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.async = true;
+    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+    script.textContent = JSON.stringify({
+      autosize:true, symbol:symbol, interval:'5', timezone:'Etc/UTC',
+      theme:'light', style:'1', locale:'en', hide_side_toolbar:false,
+      allow_symbol_change:true, support_host:'https://www.tradingview.com'
+    });
+    container.appendChild(script);
+    if (note) note.textContent = 'Showing ' + pair + ' (real market).';
+  }
+  // Tap any signal card to load its pair in the chart.
+  $('signalGrid').addEventListener('click', function(e){
+    var card = e.target.closest('[data-pair]');
+    if (card) loadChart(card.getAttribute('data-pair'));
+  });
+
+  // ---------- Results (live rows, same row markup as the sample rows) ----------
+  function loadLiveResults(){
+    fetchJson('/results?plan=' + PLAN + '&limit=20')
+      .then(function(body){
+        var rows = Array.isArray(body) ? body : (body.results || []);
+        rows = rows.filter(function(r){ return String(r.market || 'Real').toLowerCase() !== 'otc'; });
+        if (!rows.length) return; // keep the sample rows
+        var tbody = $('resultsBody');
+        if (!tbody) return;
+        var html = '';
+        rows.forEach(function(r){
+          var dirUp = String(r.direction || '').toUpperCase();
+          var resUp = String(r.result || '').toUpperCase();
+          var cls = resUp === 'WIN' ? 'win' : (resUp === 'LOSS' ? 'loss' : '');
+          var date = (r.sent_at || '').slice(0, 10) || '—';
+          var strat = STRATEGY_DISPLAY[String(r.strategy || '').toLowerCase()] || r.strategy || '';
+          html += '<tr><td>' + esc(date) + '</td><td>' + esc(r.pair) + '</td>' +
+            '<td><span class="dir-pill ' + (dirUp === 'CALL' ? 'call' : 'put') + '">' + esc(dirUp) + '</span></td>' +
+            '<td>' + esc(strat) + '</td>' +
+            '<td class="' + cls + '">' + esc(resUp) + '</td></tr>';
+        });
+        tbody.innerHTML = html;
+        var tag = $('resultsTag');
+        if (tag) tag.textContent = 'Live';
+      })
+      .catch(function(){ /* API down — sample rows stay */ });
+  }
+
+  // ---------- Pay: real wallets + TXID submit ----------
+  function setWalletLine(id, address){
+    var el = $(id);
+    if (!el) return;
+    el.innerHTML = '';
+    var code = document.createElement('code');
+    code.className = 'wallet-code';
+    code.textContent = address;
+    code.title = 'Tap to copy';
+    code.addEventListener('click', function(){
+      var done = function(){ code.textContent = 'Copied!'; setTimeout(function(){ code.textContent = address; }, 1200); };
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(address).then(done, done); }
+      else { done(); }
+    });
+    el.appendChild(code);
+  }
+  function loadPremiumInfo(){
+    fetchJson('/premium/info')
+      .then(function(info){
+        if (!info || info.wallets_are_placeholders) return; // keep the "not set yet" lines
+        if (info.wallet_bsc) setWalletLine('walletBscLine', info.wallet_bsc);
+        if (info.wallet_tron) setWalletLine('walletTronLine', info.wallet_tron);
+      })
+      .catch(function(){ /* API down — "not set yet" lines stay */ });
+  }
+  var txidNetwork = 'BSC';
+  $('txidNetwork').addEventListener('click', function(e){
+    var btn = e.target.closest('[data-network]');
+    if (!btn) return;
+    txidNetwork = btn.getAttribute('data-network');
+    document.querySelectorAll('#txidNetwork .net-pill').forEach(function(b){ b.classList.toggle('active', b === btn); });
+  });
+  // The server's TXID endpoint needs a registered user id. Inside Telegram
+  // the real Telegram id is used; on the plain web a stable browser id is
+  // registered once and reused (stored locally, never a real Telegram id).
+  function webTelegramId(){
+    try {
+      var u = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user;
+      if (u && u.id) return u.id;
+    } catch (e) {}
+    return null;
+  }
+  function ensureWebUser(){
+    try {
+      var saved = window.localStorage.getItem('onyx_user_id');
+      if (saved) return Promise.resolve(parseInt(saved, 10));
+    } catch (e) {}
+    var tid = webTelegramId();
+    if (!tid) {
+      try { tid = window.localStorage.getItem('onyx_web_tid'); } catch (e) {}
+      if (!tid) {
+        tid = 9000000000 + Math.floor(Math.random() * 999999999);
+        try { window.localStorage.setItem('onyx_web_tid', String(tid)); } catch (e) {}
+      }
+      tid = parseInt(tid, 10);
+    }
+    return postJson('/users', {telegram_id: tid, username: null})
+      .then(function(body){
+        try { window.localStorage.setItem('onyx_user_id', String(body.user_id)); } catch (e) {}
+        return body.user_id;
+      });
+  }
+  $('txidSubmit').addEventListener('click', function(){
+    var input = $('txidInput');
+    var status = $('txidStatus');
+    var txid = (input.value || '').trim();
+    if (!txid) {
+      status.textContent = 'Please paste your TXID first.';
+      status.className = 'txid-status error';
+      return;
+    }
+    status.textContent = 'Checking your TXID…';
+    status.className = 'txid-status';
+    ensureWebUser()
+      .then(function(userId){
+        return postJson('/payments/txid', {user_id:userId, network:txidNetwork, txid:txid, amount:1.97});
+      })
+      .then(function(body){
+        status.textContent = (body && body.message) || 'Payment received for manual verification. Premium starts after your payment is confirmed (30 days from approval).';
+        status.className = 'txid-status ok';
+      })
+      .catch(function(err){
+        status.textContent = (err && err.message) || 'We could not verify this TXID yet. Check the network matches (BSC or Tron), the TXID is pasted fully and correctly, and try again in a few minutes.';
+        status.className = 'txid-status error';
+      });
+  });
+
+  // ---------- Boot the live wiring ----------
+  loadChart('EUR/USD');
+  loadLiveSignals();
+  loadLiveResults();
+  loadPremiumInfo();
+</script>
 </body>
 </html>
