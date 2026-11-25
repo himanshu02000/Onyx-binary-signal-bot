@@ -14,7 +14,7 @@
    Default: local backend. Override with ?api=https://your-render-url/api
    or by saving 'onyx_api_base' in localStorage. */
 var ONYX_CONFIG = {
-  API_BASE: 'http://localhost:8000/api',
+  API_BASE: 'https://onyx-signal-bot.onrender.com/api', // live Render backend (Nov 25); override with ?api= or localStorage 'onyx_api_base' for local dev
   PRICE_USDT: 1.97,
   FREE_DAILY_SIGNALS: 10, // owner's call Nov 24: free = 10 signals/day (for now)
   PREMIUM_DAILY_SIGNALS: 5
